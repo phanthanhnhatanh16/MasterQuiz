@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 – Xin lỗi vì sự bất tiện</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;overflow:hidden;color:#e6edf3;font-family:Inter,-apple-system,'Segoe UI',Roboto,sans-serif;background:radial-gradient(ellipse at 50% 120%,#1b2a4a 0,#0d1117 55%,#05070b 100%)}
+.l{position:fixed;top:-60px;left:-60px;width:calc(100% + 120px);height:calc(100% + 120px);pointer-events:none;transition:transform .15s ease-out}
+.l i{position:absolute;border-radius:50%;background:#fff;animation:tw 3s infinite ease-in-out}
+@keyframes tw{50%{opacity:.25}}
+.moon{position:fixed;left:50%;bottom:-340px;width:760px;height:760px;margin-left:-380px;border-radius:50%;background:radial-gradient(circle at 50% 12%,#2f3b55,#10151f 60%);box-shadow:0 -10px 90px rgba(88,166,255,.25),inset 0 18px 40px rgba(255,255,255,.07)}
+.sat{position:fixed;font-size:34px;top:18%;left:-60px;animation:fly 16s linear infinite;filter:drop-shadow(0 0 10px rgba(88,166,255,.6))}
+@keyframes fly{to{left:108%;top:8%}}
+.lg{position:fixed;top:16px;right:16px;z-index:5;padding:8px 14px;border-radius:8px;border:1px solid #30363d;background:#161b22;color:#e6edf3;font:600 12px Inter,sans-serif;cursor:pointer}
+.lg:hover{border-color:#58a6ff}
+main{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 20px 90px}
+.n{font-size:clamp(96px,24vw,230px);font-weight:800;line-height:.95;letter-spacing:-.04em;margin:0;background:linear-gradient(180deg,#fff 20%,rgba(255,255,255,.08));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 60px rgba(88,166,255,.25)}
+h1{margin:6px 0 12px;font-size:clamp(20px,3.2vw,30px);font-weight:600}
+p{max-width:520px;margin:0 0 10px;color:#8b949e;line-height:1.65;font-size:15px}
+.box{display:flex;gap:8px;width:min(600px,100%);margin:16px 0 14px}
+.box input{flex:1;min-width:0;padding:11px 14px;border-radius:8px;border:1px solid #30363d;background:rgba(13,17,23,.85);color:#58a6ff;font:12.5px Consolas,monospace;outline:none}
+.box input:focus{border-color:#58a6ff;box-shadow:0 0 0 3px rgba(88,166,255,.25)}
+.b{padding:11px 18px;border-radius:8px;border:1px solid rgba(240,246,252,.1);font:600 14px Inter,sans-serif;cursor:pointer;text-decoration:none;color:#fff;background:#238636;transition:.15s;white-space:nowrap}
+.b:hover{background:#2ea043}
+.b.g{background:#21262d;color:#e6edf3}.b.g:hover{background:#30363d}
+</style>
+</head>
+<body>
+<button class="lg" id="lg"></button>
+<div class="l" id="l1"></div><div class="l" id="l2"></div><div class="l" id="l3"></div>
+<div class="sat">🛰️</div>
+<div class="moon"></div>
+<main>
+  <div class="n">404</div>
+  <h1 data-i="h"></h1>
+  <p data-i="p1"></p>
+  <p data-i="p2"></p>
+  <div class="box">
+    <input id="u" readonly value="https://andrewdatadev.neocities.org/Quiz/quiztinhoc" onclick="this.select()">
+    <button class="b g" id="cp"></button>
+  </div>
+  <a class="b" href="https://andrewdatadev.neocities.org/Quiz/quiztinhoc" data-i="b"></a>
+</main>
+<script>
+const D={vi:{t:'404 – Xin lỗi vì sự bất tiện',h:'Đây không phải trang bạn đang tìm. Xin lỗi nhé!',p1:'Bên mình vừa đổi máy chủ bảng xếp hạng nên bài ôn tập Tin học có thể bị lỗi hoặc không lưu được điểm trong thời gian qua. Mong các bạn thông cảm.',p2:'Trang đã chuyển sang địa chỉ mới bên dưới. Nếu điểm chưa hiện trên bảng xếp hạng, bạn chỉ cần làm lại một lượt là được.',b:'Đến bài ôn tập mới',cp:'Sao chép',ok:'Đã chép!'},
+en:{t:'404 – Sorry for the inconvenience',h:'This is not the web page you are looking for. Sorry!',p1:'We recently switched the leaderboard server, so the IT practice quiz may have shown errors or failed to save scores for a while. Thank you for your patience.',p2:'The quiz has moved to the new address below. If your score is not on the leaderboard, just take the quiz once more.',b:'Go to the new quiz',cp:'Copy',ok:'Copied!'}};
+let l='vi';try{l=localStorage.getItem('azl')||'vi'}catch(e){}
+if(!D[l])l='vi';
+const $=id=>document.getElementById(id);
+function ap(){document.documentElement.lang=l;document.title=D[l].t;document.querySelectorAll('[data-i]').forEach(e=>e.textContent=D[l][e.dataset.i]);$('cp').textContent=D[l].cp;$('lg').textContent='🌐 '+(l==='vi'?'English':'Tiếng Việt')}
+$('lg').onclick=()=>{l=l==='vi'?'en':'vi';try{localStorage.setItem('azl',l)}catch(e){}ap()};
+$('cp').onclick=()=>{const u=$('u');u.select();const done=()=>{$('cp').textContent=D[l].ok;setTimeout(()=>$('cp').textContent=D[l].cp,1500)};
+  (navigator.clipboard?navigator.clipboard.writeText(u.value):Promise.reject()).then(done,()=>{try{document.execCommand('copy');done()}catch(e){}})};
+/* stars + parallax */
+[[1,90,1],[2,50,2],[3,25,3]].forEach(([n,c,s])=>{let h='';for(let i=0;i<c*3;i++){const sz=s*(Math.random()*.6+.7);h+=`<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;opacity:${.35+s*.2};animation-delay:${Math.random()*3}s"></i>`}$('l'+n).innerHTML=h});
+document.addEventListener('mousemove',e=>{const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);[1,2,3].forEach(n=>{$('l'+n).style.transform=`translate(${-x*n*14}px,${-y*n*14}px)`})});
+ap();
+</script>
+</body>
+</html>

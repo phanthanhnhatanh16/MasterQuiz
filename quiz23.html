@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Azota – Trắc nghiệm Tin học</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Nunito:wght@400;600;700&family=Lexend:wght@400;600;700&family=Inter:wght@400;600;700&family=Quicksand:wght@400;600;700&family=Merriweather:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f0f2f5;--card:#fff;--tx:#333;--mut:#666;--bd:#ddd;--op:#f8f9fa;--hv:#eef5ff;--pri:#0066cc;--ok-bg:#d4edda;--ok-bd:#28a745;--ok-tx:#155724;--no-bg:#f8d7da;--no-bd:#dc3545;--no-tx:#721c24}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){color-scheme:dark;--bg:#16181c;--card:#22252b;--tx:#e8e8e8;--mut:#a0a4ab;--bd:#3a3e46;--op:#2b2f36;--hv:#1f3350;--pri:#5aa2ff;--ok-bg:#1d3a27;--ok-tx:#9ee2b0;--no-bg:#40222a;--no-tx:#f1a7b0}}
+html,body{height:auto}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--tx);margin:0;padding:20px}
+.container{max-width:640px;background:var(--card);padding:30px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);margin:30px auto;position:relative}
+.timer{position:absolute;top:16px;right:16px;background:#ff4d4d;color:#fff;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:14px}
+h1{color:var(--pri);text-align:center;margin:10px 0 4px;font-size:24px}
+.sub{text-align:center;color:var(--mut);font-size:14px;margin-bottom:6px}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin:10px 0 20px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .3s}
+.tag{display:inline-block;font-size:12px;color:var(--pri);border:1px solid var(--pri);border-radius:10px;padding:2px 8px;margin-bottom:10px}
+.qt{font-size:18px;font-weight:600;margin-bottom:16px}
+.opt{display:block;width:100%;text-align:left;padding:12px 15px;margin:10px 0;background:var(--op);color:var(--tx);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:16px;font-family:inherit}
+.opt:hover:not(:disabled){background:var(--hv);border-color:var(--pri)}
+.opt.ok{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-tx);font-weight:bold}
+.opt.no{background:var(--no-bg);border-color:var(--no-bd);color:var(--no-tx)}
+.st{padding:10px 0;border-bottom:1px solid var(--bd)}
+.st p{margin:0 0 8px;font-size:16px}
+.st .row{display:flex;gap:10px}
+.st .opt{margin:0;text-align:center;padding:8px}
+.nav{margin-top:22px;text-align:right}
+.btn{padding:10px 25px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;font-weight:bold}
+#res{display:none;text-align:center}
+.score{font-size:32px;font-weight:bold;color:#ff9900;margin:15px 0}
+.hide{display:none}
+#intro h2{text-align:center;font-size:20px;margin:6px 0 14px}
+.code{text-align:center;font-size:14px;margin-bottom:22px}
+.irow{display:flex;justify-content:space-between;padding:9px 0;font-size:15px}
+.irow span{color:var(--mut)}
+.go{display:block;width:100%;margin-top:18px;padding:12px;background:#fa7316;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+.go:hover{background:#e0620b}
+.hb{display:block;margin:16px auto 0;padding:9px 18px;background:var(--op);color:var(--mut);border:1px solid var(--bd);border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit}
+#hist{margin-top:12px;max-height:220px;overflow-y:auto}
+.adm{display:none;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 16px;background:#fff3cd;color:#664d03;border-bottom:1px solid #ffe69c;font-size:13px}
+.adm .ib{padding:6px 10px;font-size:13px;background:#fff;color:#333;border-color:#ddd}
+.adm input{width:70px;padding:6px;border:1px solid #ddd;border-radius:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.two .l{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px}
+.two .r{border-left:1px solid var(--bd);padding-left:24px;text-align:left}
+@media(max-width:640px){.two{grid-template-columns:1fr}.two .r{border-left:none;padding-left:0}}
+#qz{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;z-index:5;font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--card);border-bottom:1px solid var(--bd);font-weight:600}
+.tb{display:flex;align-items:center;gap:8px}
+.ib{background:var(--op);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:14px;font-family:inherit}
+.ib:disabled{opacity:.45;cursor:default}
+.main{flex:1;overflow-y:auto;padding:14px}
+.keys{background:var(--card);border-radius:8px;padding:12px 40px 12px 16px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;position:relative;margin-bottom:14px}
+.keys kbd{background:var(--op);border:1px solid var(--bd);border-radius:4px;padding:2px 8px;font-family:monospace}
+.keys .x{position:absolute;top:8px;right:8px;background:var(--no-bg);color:var(--no-bd);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer}
+.qc{background:var(--card);border-radius:8px;padding:16px 12px}
+.qn{font-weight:700}
+.qq{font-weight:600;margin:4px 0 12px}
+.dv{display:flex;align-items:center;color:var(--mut);margin:12px 0 18px}
+.dv:before,.dv:after{content:"";flex:1;border-top:1px solid var(--bd)}
+.dv span{padding:0 20px}
+.oi{display:flex;align-items:center;gap:12px;margin:10px 0;cursor:pointer;background:none;border:none;padding:0;color:var(--tx);font-family:inherit;font-size:14px;text-align:left}
+.oi:disabled{cursor:default}
+.ol{width:40px;height:40px;flex:none;border:1px solid var(--tx);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600}
+.ot{border:1px solid var(--tx);border-radius:6px;padding:9px 10px}
+.oi.sel .ol{background:var(--pri);color:#fff;border-color:var(--pri)}
+.oi.sel .ot{border-color:var(--pri);color:var(--pri)}
+.oi.ok .ol,.oi.ok .ot{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-tx)}
+.oi.no .ol,.oi.no .ot{background:var(--no-bg);border-color:var(--no-bd);color:var(--no-tx)}
+.tfr{display:flex;gap:18px}
+.qc .st p{font-size:14px}
+.bot{display:flex;align-items:center;gap:16px;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--bd)}
+.dots{flex:1;display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.dot{width:10px;height:10px;flex:none;border:1.5px solid #8a94a6;border-radius:50%;box-sizing:border-box}
+.dot.cur{border-color:var(--pri);background:var(--pri)}
+.dot.ok{background:var(--ok-bd);border-color:var(--ok-bd)}
+.dot.no{background:var(--no-bd);border-color:var(--no-bd)}
+.dot.pt{background:#ff9900;border-color:#ff9900}
+.dot.sk{background:#8a94a6}
+.chk{padding:12px 28px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap}
+.chk:disabled{opacity:.45;cursor:default}
+
+/* ===== Giao diện & phông chữ ===== */
+:root[data-theme="dark"]{color-scheme:dark;--bg:#16181c;--card:#22252b;--tx:#e8e8e8;--mut:#a0a4ab;--bd:#3a3e46;--op:#2b2f36;--hv:#1f3350;--pri:#5aa2ff;--ok-bg:#1d3a27;--ok-tx:#9ee2b0;--no-bg:#40222a;--no-tx:#f1a7b0}
+:root[data-theme="ocean"]{--bg:#e6f3fa;--bgi:linear-gradient(160deg,#d4ecf9,#eaf6fd);--pri:#0077b6;--hv:#e1f1fa;--op:#f3f9fd;--bd:#cfe3ef}
+:root[data-theme="sakura"]{--bg:#fdf0f4;--bgi:linear-gradient(160deg,#fde2eb,#fff5f8);--pri:#d6336c;--hv:#fde7ef;--op:#fff7fa;--bd:#f3cfdc}
+:root[data-theme="forest"]{--bg:#edf5ee;--bgi:linear-gradient(160deg,#d9ecdc,#f1f8f2);--pri:#2f7d4f;--hv:#e2f1e6;--op:#f5faf6;--bd:#cfe3d4}
+:root[data-theme="sunset"]{--bg:#fff3e6;--bgi:linear-gradient(160deg,#ffe2c4,#fff8ef);--pri:#e8590c;--hv:#ffe9d6;--op:#fffaf4;--bd:#f6d9bd}
+:root[data-theme="night"]{color-scheme:dark;--bg:#12101f;--bgi:linear-gradient(160deg,#1a1535,#0e0c1b);--card:#1c1a2e;--tx:#ece9f7;--mut:#a9a3c4;--bd:#38335a;--op:#252240;--hv:#2d2858;--pri:#a78bfa;--ok-bg:#1d3a30;--ok-tx:#9ee2c0;--no-bg:#402236;--no-tx:#f1a7c0}
+body{background:var(--bgi,var(--bg));font-family:var(--ff,'Segoe UI',Tahoma,sans-serif);color:var(--tx)}
+button,input,select{font-family:inherit}
+.container{border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.10)}
+.go{background:linear-gradient(135deg,#fa7316,#ff9a3c)}
+.go,.chk,.btn{transition:transform .15s,box-shadow .15s}
+.go:hover,.chk:not(:disabled):hover,.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.ot,.ol{transition:all .15s}
+.oi:not(:disabled):hover .ot{border-color:var(--pri);background:var(--hv)}
+.oi:not(:disabled):hover .ol{border-color:var(--pri);color:var(--pri)}
+.qc{box-shadow:0 2px 14px rgba(0,0,0,.07);border-radius:14px}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#qprog{height:4px;background:var(--bd)}
+#qprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri),#fa7316);transition:width .35s}
+.gear{position:fixed;top:12px;right:12px;z-index:41;width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.pop{position:fixed;top:60px;right:12px;z-index:40;width:270px;max-height:80vh;overflow-y:auto;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:14px;box-shadow:0 12px 32px rgba(0,0,0,.25)}
+.pop b{display:block;margin:6px 0}
+#themes{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.swb{display:flex;align-items:center;gap:8px;padding:7px 8px;background:var(--op);color:var(--tx);border:2px solid var(--bd);border-radius:10px;cursor:pointer;font-size:13px}
+.swb i{width:16px;height:16px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.2)}
+.swb.on{border-color:var(--pri)}
+#fontSel{width:100%;padding:9px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:14px}
+.cf{position:fixed;top:-40px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+
+/* ===== Leaderboard mới ===== */
+#qz{background:var(--bgi,var(--bg))}
+body{font-family:var(--ff,var(--ffd,'Segoe UI',Tahoma,sans-serif))}
+.lb-pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:8px 0 16px}
+.lb-pc{flex:1;max-width:120px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.lb-medal{font-size:26px;line-height:1;animation:popin .5s ease both}
+.lb-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex:none;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.lb-pc .lb-av{width:48px;height:48px;font-size:20px;margin:4px 0}
+.p1 .lb-av{width:58px;height:58px;font-size:24px;border:3px solid gold}
+.lb-pn{font-size:13px;font-weight:600;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-ps{font-weight:700;color:var(--pri);font-size:15px}
+.lb-bar{width:100%;margin-top:6px;border-radius:8px 8px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:6px;color:#fff;font-weight:800;font-size:20px;transform-origin:bottom;animation:grow .6s ease both;text-shadow:0 1px 2px rgba(0,0,0,.3)}
+.p1 .lb-bar{height:90px;background:linear-gradient(#ffd700,#f0a500)}
+.p2 .lb-bar{height:64px;background:linear-gradient(#d9dde3,#9aa3ad)}
+.p3 .lb-bar{height:46px;background:linear-gradient(#e0a370,#b0703a)}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes popin{from{transform:scale(0)}to{transform:scale(1)}}
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;margin:6px 0;background:var(--op);animation:up .35s ease both}
+.lb-row.me{background:var(--hv);outline:2px solid var(--pri)}
+.lb-rk{width:22px;text-align:center;font-weight:700;color:var(--mut)}
+.lb-mid{flex:1;min-width:0}
+.lb-nm{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sc{height:6px;background:var(--bd);border-radius:3px;margin-top:5px;overflow:hidden}
+.lb-sc i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),#fa7316);border-radius:3px}
+.lb-pt{font-size:14px}
+.lb-del{padding:2px 6px;font-size:12px;margin-top:4px}
+.lb-row .lb-del{margin-top:0}
+/* ===== Roblox Retro ===== */
+:root[data-theme="roblox"]{--ffd:Verdana,Geneva,'DejaVu Sans',sans-serif;--bg:#78c0ff;--bgi:radial-gradient(circle at 20px 20px,rgba(255,255,255,.25) 5px,rgba(0,0,0,.13) 6px,transparent 7px) 0 0/40px 40px fixed,linear-gradient(#78c0ff 0,#c4e8ff 50%,#3fae49 50%,#2e8f3a 100%) fixed;--card:#f2f2f2;--tx:#1b2a34;--mut:#4a5a66;--bd:#1b2a34;--op:#e2e2e2;--hv:#cfe8ff;--pri:#1e5fd0;--ok-bg:#b6f0b0;--ok-bd:#1f8f2b;--ok-tx:#0b4d12;--no-bg:#ffc4c0;--no-bd:#d11a1a;--no-tx:#7a0c0c}
+:root[data-theme="roblox"] .container{border:4px solid #1b2a34;border-radius:4px;box-shadow:8px 8px 0 #1b2a34}
+:root[data-theme="roblox"] .qc,:root[data-theme="roblox"] .keys,:root[data-theme="roblox"] .pop{border:3px solid #1b2a34;border-radius:4px;box-shadow:5px 5px 0 #1b2a34}
+:root[data-theme="roblox"] .top{background:#dcdcdc;border-bottom:3px solid #1b2a34}
+:root[data-theme="roblox"] .bot{background:#dcdcdc;border-top:3px solid #1b2a34}
+:root[data-theme="roblox"] .go,:root[data-theme="roblox"] .chk,:root[data-theme="roblox"] .btn{border:3px solid #1b2a34;border-radius:4px;box-shadow:0 4px 0 #1b2a34;text-transform:uppercase;letter-spacing:.5px;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.45)}
+:root[data-theme="roblox"] .go{background:linear-gradient(#5fe36b,#26a933)}
+:root[data-theme="roblox"] .chk,:root[data-theme="roblox"] .btn{background:linear-gradient(#4a9bff,#1e5fd0)}
+:root[data-theme="roblox"] .go:active,:root[data-theme="roblox"] .chk:active,:root[data-theme="roblox"] .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #1b2a34}
+:root[data-theme="roblox"] .ib{border:2px solid #1b2a34;border-radius:4px;background:linear-gradient(#fff,#d4d4d4);box-shadow:0 2px 0 #1b2a34}
+:root[data-theme="roblox"] .ot{border-width:3px;border-radius:3px}
+:root[data-theme="roblox"] .ol{border-width:3px;border-radius:4px}
+:root[data-theme="roblox"] .oi.sel .ol{background:#1e5fd0}
+:root[data-theme="roblox"] .lb-av{border-radius:4px;border:2px solid #1b2a34}
+:root[data-theme="roblox"] .lb-row{border:2px solid #1b2a34;border-radius:3px}
+:root[data-theme="roblox"] .lb-bar{border:2px solid #1b2a34;border-bottom:none;border-radius:3px 3px 0 0}
+:root[data-theme="roblox"] .swb{border-radius:3px}
+:root[data-theme="roblox"] h1,:root[data-theme="roblox"] h2,:root[data-theme="roblox"] h3{text-transform:uppercase;letter-spacing:.5px}
+
+/* ===== Golden + nhãn Premium/Admin ===== */
+:root[data-theme="golden"]{--bg:#f3c75a;--bgi:radial-gradient(circle at 15% 10%,#fff0b8 0,transparent 40%),radial-gradient(circle at 85% 90%,#ffd24d 0,transparent 45%),linear-gradient(135deg,#f6d365,#e8a317 55%,#b8860b) fixed;--card:#fff9e6;--tx:#3d2a00;--mut:#7a5c14;--bd:#e6c565;--op:#fff3cc;--hv:#ffe9a8;--pri:#b8860b;--ok-bg:#e1f5c8;--ok-bd:#6aa621;--ok-tx:#2f5a05;--no-bg:#ffd9cf;--no-bd:#c2410c;--no-tx:#7a2307}
+:root[data-theme="golden"] .container,:root[data-theme="golden"] .qc,:root[data-theme="golden"] .pop,:root[data-theme="golden"] .keys{border:2px solid #d4a017;box-shadow:0 8px 30px rgba(140,100,0,.35)}
+:root[data-theme="golden"] .top,:root[data-theme="golden"] .bot{background:#fff1c1;border-color:#e6c565}
+:root[data-theme="golden"] .go,:root[data-theme="golden"] .chk,:root[data-theme="golden"] .btn{background:linear-gradient(135deg,#ffe27a,#d4a017);color:#3d2a00;text-shadow:0 1px 0 rgba(255,255,255,.5);border:1px solid #b8860b}
+:root[data-theme="golden"] h1,:root[data-theme="golden"] h2,:root[data-theme="golden"] h3{color:#8a6200}
+:root[data-theme="golden"] .lb-bar{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.tag{font-weight:800;font-size:.9em}
+.tag.premium{color:#d4a017;text-shadow:0 0 8px rgba(255,200,0,.6);animation:shine 1.8s ease-in-out infinite alternate}
+.tag.admin{color:#000;background:#e8e8e8;padding:0 6px;border-radius:6px}
+@keyframes shine{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+.adm.prem{background:#fff3c4;color:#6b4e00;border-bottom-color:#f0d27a}
+.qq{white-space:pre-line}
+#rv{margin-top:22px;text-align:left}.rvc{background:var(--op);border:1px solid var(--bd);border-radius:10px;padding:12px;margin:10px 0;font-size:14px}.rvc .qs{font-weight:600;white-space:pre-line}.rvc .an{color:var(--ok-tx);background:var(--ok-bg);border-radius:6px;padding:6px 8px;margin-top:6px;white-space:pre-line}
+.top{padding-top:10px}
+.pus{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.pus .ib{font-weight:700}.pus .ib.on{background:var(--pri);color:#fff}
+.fpop{position:fixed;left:50%;top:38%;transform:translateX(-50%);font-size:30px;font-weight:800;color:#ff9900;text-shadow:0 2px 6px rgba(0,0,0,.35);z-index:60;pointer-events:none;animation:fl 1.1s ease forwards;white-space:nowrap}
+@keyframes fl{to{transform:translate(-50%,-80px);opacity:0}}
+#lb{max-height:72vh;overflow-y:auto}.lbh{font-size:13px;color:var(--mut);margin-bottom:6px}
+.riv{font-size:12px;color:var(--mut);margin-bottom:8px}.riv.gl{animation:glt .15s infinite;filter:hue-rotate(90deg) contrast(1.5)}@keyframes glt{0%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}100%{transform:translate(1px,2px)}}
+.chip{display:inline-block;background:var(--hv);color:var(--pri);border:1px solid var(--pri);border-radius:12px;padding:2px 9px;margin:2px 4px 2px 0;font-size:12px;font-weight:700}.fx{margin-bottom:8px;min-height:4px}
+
+/* ===== Wayground ===== */
+:root[data-wg]{color-scheme:dark;--ffd:'Quicksand','Nunito',sans-serif;--tx:#fff;--ok-bg:#17663a;--ok-bd:#3ddc84;--ok-tx:#e3ffee;--no-bg:#7a1730;--no-bd:#ff5c7c;--no-tx:#ffe0e6;--t1:linear-gradient(#c9c500,#6d6c00);--t2:linear-gradient(#c27bff,#6a1fb8);--t3:linear-gradient(#ff9633,#f04a00);--t4:linear-gradient(#22d8c6,#007a6b)}
+:root[data-theme="wayground"]{--bg:#2a0620;--bgi:radial-gradient(circle at 15% 0,#8a1857 0,transparent 55%),linear-gradient(180deg,#5b0f3e,#2a0620) fixed;--card:#3b0e30;--op:#4c1a40;--hv:#63274f;--bd:#6e2c5c;--mut:#e3bfd6;--pri:#ff7ac0;--wm:#5b0f3e;--wd:#2a0620;--ov:20,0,16}
+:root[data-theme="wg-ocean"]{--bg:#04193d;--bgi:radial-gradient(circle at 15% 0,#1f7ad1 0,transparent 55%),linear-gradient(180deg,#0b4a8f,#04193d) fixed;--card:#0a2a57;--op:#123a6e;--hv:#1a4a86;--bd:#2a5a96;--mut:#bcd8f5;--pri:#6ec1ff;--wm:#0b3d7a;--wd:#04193d;--ov:2,10,30}
+:root[data-theme="wg-forest"]{--bg:#03231a;--bgi:radial-gradient(circle at 15% 0,#1f9a62 0,transparent 55%),linear-gradient(180deg,#0f5a3a,#03231a) fixed;--card:#0b3b2a;--op:#13503a;--hv:#1b6549;--bd:#2a7a5a;--mut:#bfe8d2;--pri:#7be0a6;--wm:#0f5a3a;--wd:#03231a;--ov:0,18,10}
+:root[data-theme="wg-sunset"]{--bg:#3d0a12;--bgi:radial-gradient(circle at 15% 0,#e8590c 0,transparent 55%),linear-gradient(180deg,#b3380f,#3d0a12) fixed;--card:#4a1410;--op:#62201a;--hv:#7a2d22;--bd:#8f3d2e;--mut:#ffd5bd;--pri:#ffb066;--wm:#8a2a0c;--wd:#3d0a12;--ov:30,6,0}
+:root[data-theme="wg-night"]{--bg:#07051a;--bgi:radial-gradient(circle at 15% 0,#4a35c9 0,transparent 55%),linear-gradient(180deg,#1d1550,#07051a) fixed;--card:#15103a;--op:#211a52;--hv:#2c2468;--bd:#3b3290;--mut:#c9c0f0;--pri:#b9a4ff;--wm:#1d1550;--wd:#07051a;--ov:6,4,26}
+:root[data-theme="wg-candy"]{--bg:#4a1a7a;--bgi:radial-gradient(circle at 15% 0,#ffb3e6 0,transparent 55%),linear-gradient(180deg,#7b2ff7,#f107a3) fixed;--card:#4a1a7a;--op:#5f2a95;--hv:#7438b0;--bd:#8a4cc8;--mut:#f3d6ff;--pri:#ffd93d;--wm:#7b2ff7;--wd:#4a1a7a;--ov:30,0,50;--t1:linear-gradient(#ffd93d,#e6a700);--t2:linear-gradient(#c77dff,#7b2cbf);--t3:linear-gradient(#ff6b9d,#d6246e);--t4:linear-gradient(#4cc9f0,#0a84c7)}
+.tgs{display:flex;gap:6px;margin-bottom:8px}.tgs .swb{flex:1;justify-content:center;font-weight:700;border-radius:999px}
+:root[data-wg] .container{background:rgba(var(--ov),.5);border:1px solid rgba(255,255,255,.12);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+:root[data-wg] .chk,:root[data-wg] .btn{background:#fff;color:var(--wm);border-radius:999px}
+:root[data-wg] h1,:root[data-wg] h2,:root[data-wg] h3{color:#fff}
+:root[data-wg] .top,:root[data-wg] .bot{background:rgba(var(--ov),.45);border:none}
+:root[data-wg] .top .ib,:root[data-wg] .bot .ib{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff}
+:root[data-wg] #qprog{width:min(520px,70%);height:10px;margin:12px auto 0;border-radius:6px;background:rgba(255,255,255,.2);overflow:hidden}
+:root[data-wg] #qprog i{background:#fff}
+:root[data-wg] .main>*{max-width:1100px;margin-left:auto;margin-right:auto}
+:root[data-wg] .keys,:root[data-wg] .pus .ib{background:rgba(var(--ov),.5);border:1px solid rgba(255,255,255,.15);color:#fff}
+:root[data-wg] .pus .ib.on{background:var(--pri);color:var(--wd)}
+:root[data-wg] .qc{background:none;box-shadow:none;padding:0}
+:root[data-wg] .qn{display:table;margin:0 auto;position:relative;z-index:1;background:var(--wd);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 16px;color:#ffd24d;font-size:14px}
+:root[data-wg] .qq{background:rgba(var(--ov),.55);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:32px 24px 28px;margin:-13px auto 14px;text-align:center;font-size:clamp(18px,2.2vw,26px);font-weight:700}
+:root[data-wg] .dv{justify-content:center;margin:0 0 16px;font-size:13px}
+:root[data-wg] .dv:before,:root[data-wg] .dv:after{display:none}
+:root[data-wg] .st{background:rgba(var(--ov),.4);border:none;border-radius:12px;padding:12px;margin-bottom:12px}
+:root[data-wg] .st p{text-align:center;font-size:16px;font-weight:700}
+:root[data-wg] #opts:has(>.oi){display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){:root[data-wg] #opts:has(>.oi){grid-template-columns:1fr 1fr}}
+:root[data-wg] .oi{position:relative;width:100%;margin:0;min-height:170px;justify-content:center;border-radius:12px;color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 4px 0 rgba(0,0,0,.25);transition:transform .15s,filter .15s}
+@media(max-width:820px){:root[data-wg] .oi{min-height:120px}}
+:root[data-wg] .tfr{gap:14px}
+:root[data-wg] .tfr .oi{flex:1;min-height:64px}
+:root[data-wg] .oi .ol,:root[data-wg] .oi.sel .ol,:root[data-wg] .oi.ok .ol,:root[data-wg] .oi.no .ol,:root[data-wg] .oi:not(:disabled):hover .ol{position:absolute;top:8px;right:8px;width:26px;height:26px;border:none;border-radius:6px;background:rgba(0,0,0,.22);color:#fff;font-size:13px}
+:root[data-wg] #opts>.oi .ol{font-size:0}
+:root[data-wg] #opts>.oi .ol:after{font-size:13px}
+:root[data-wg] #opts>.oi:nth-child(1) .ol:after{content:"1"}
+:root[data-wg] #opts>.oi:nth-child(2) .ol:after{content:"2"}
+:root[data-wg] #opts>.oi:nth-child(3) .ol:after{content:"3"}
+:root[data-wg] #opts>.oi:nth-child(4) .ol:after{content:"4"}
+:root[data-wg] .oi .ot,:root[data-wg] .oi.sel .ot,:root[data-wg] .oi.ok .ot,:root[data-wg] .oi.no .ot,:root[data-wg] .oi:not(:disabled):hover .ot{border:none;background:none;color:#fff;padding:0 8px;text-align:center;font-size:clamp(15px,1.8vw,22px);font-weight:700}
+:root[data-wg] #opts>.oi:nth-child(1),:root[data-wg] .tfr .oi:nth-child(1){background:var(--t1)}
+:root[data-wg] #opts>.oi:nth-child(2){background:var(--t2)}
+:root[data-wg] #opts>.oi:nth-child(3),:root[data-wg] .tfr .oi:nth-child(2){background:var(--t3)}
+:root[data-wg] #opts>.oi:nth-child(4){background:var(--t4)}
+:root[data-wg] .tfr .oi:nth-child(1){background:var(--t4)}
+:root[data-wg] .oi:not(:disabled):hover{transform:translateY(-3px);filter:brightness(1.1)}
+:root[data-wg] .oi.sel{outline:4px solid #fff;outline-offset:-4px}
+:root[data-wg] #opts .oi:disabled:not(.ok):not(.no){opacity:.55}
+:root[data-wg] #opts .oi.ok{background:linear-gradient(#35e07f,#12843e);outline:4px solid #fff;outline-offset:-4px;opacity:1}
+:root[data-wg] #opts .oi.no{background:linear-gradient(#ff5c7c,#a1122f);opacity:1}
+:root[data-wg] .dot{border-color:rgba(255,255,255,.5)}
+:root[data-wg] .dot.cur{background:#fff;border-color:#fff}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="timer" id="tm" style="display:none">⏱️ 60:00</div>
+  <div id="intro">
+    <div style="text-align:center;font-size:46px;line-height:1">🌱</div>
+    <h2>Ôn Tập Giữa kì Môn Tin học</h2>
+    <div class="code">Mã đề thi: <b>cbvnkp</b></div>
+    <div class="irow"><span>🕒 Thời gian làm bài</span><b>60 phút</b></div>
+    <div class="irow"><span>❓ Số lượng câu hỏi</span><b id="iq"></b></div>
+    <div class="irow"><span>📋 Loại đề</span><b>Hỗn hợp</b></div>
+    <div class="irow"><span>👥 Tổng lượt đã làm của đề</span><b id="il"></b></div>
+    <input id="name" type="text" maxlength="40" placeholder="Nhập tên thí sinh" oninput="chkAdm()" style="display:block;width:100%;box-sizing:border-box;margin-top:16px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit">
+    <div id="pwbox" style="display:none"><input id="pw" type="password" placeholder="Nhập mật khẩu admin" style="display:block;width:100%;box-sizing:border-box;margin-top:10px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit"><input id="dn" type="text" maxlength="40" placeholder="Tên hiển thị trên bảng xếp hạng" style="display:block;width:100%;box-sizing:border-box;margin-top:10px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit"><div id="pwerr" style="color:#dc3545;font-size:13px;margin-top:6px"></div></div>
+    <div id="pre" style="text-align:center;margin-top:14px"></div>
+    <button class="go" onclick="start()">Bắt đầu luyện tập ›</button>
+    <button class="hb" onclick="toggleHist()">Xem lịch sử làm bài</button>
+    <div id="hist" class="hide"></div>
+  </div>
+  <div id="res">
+    <div class="two"><div class="l">
+    <h2>🎉 Đã hoàn thành bài thi!</h2>
+    <div class="score" id="sc"></div>
+    <p id="cc"></p>
+    <button class="btn" onclick="location.reload()">Làm lại bài</button>
+    </div><div class="r"><h3 style="margin:0 0 6px">🏆 Bảng xếp hạng</h3>
+    <div id="lb"></div></div></div>
+    <div id="rv"></div>
+  </div>
+</div>
+<button class="gear" id="gear" onclick="togStg()" title="Giao diện &amp; phông chữ">🎨</button>
+<div class="pop" id="stg" style="display:none">
+  <b>🎨 Giao diện</b><div class="tgs" id="tabs"><button class="swb" onclick="setTab(0)">🎨 Chung</button><button class="swb" onclick="setTab(1)">🎮 Wayground</button></div><div id="themes"></div>
+  <b>Aa Phông chữ</b><select id="fontSel" onchange="setFont(this.value)"></select>
+</div>
+<div id="qz">
+  <div class="top">
+    <button class="ib" onclick="two('b',this,()=>location.reload())">‹ Quay lại</button>
+    <div style="text-align:center">Thí sinh: <span id="nm"></span><div id="ls2" style="color:#ff9900;font-size:13px"></div></div>
+    <div class="tb"><span>⏱ <b id="tm2"></b></span>
+      <button class="ib" id="zo" onclick="zm(-.1)" disabled>−</button><button class="ib" onclick="zm(.1)">+</button><button class="ib" onclick="snd=!snd;this.textContent=snd?'🔊':'🔇'">🔊</button><button class="ib" onclick="togStg()">🎨</button><button class="ib" onclick="fs()">⛶</button></div>
+  </div>
+  <div id="qprog"><i></i></div>
+  <div class="adm prem" id="prm"><b>👑 Premium:</b>
+    <button class="ib" id="pa" onclick="premAns()"></button>
+    <button class="ib" id="pt" onclick="premTime()"></button>
+  </div>
+  <div class="adm" id="adm"><b>🛠 Admin:</b>
+    <button class="ib" onclick="admSkip()">⏭ Bỏ qua ngay</button>
+    <button class="ib" onclick="admAuto()">✔ Tự trả lời đúng</button>
+    <button class="ib" onclick="admPlus()">＋1 câu đúng</button>
+    <input id="sp" type="number" min="0" max="10" step="0.1" placeholder="0–10"><button class="ib" onclick="admSet()">Đặt điểm</button>
+    <button class="ib" onclick="left+=300">⏱ +5 phút</button>
+    <button class="ib" onclick="finish()">Nộp bài ngay</button>
+  </div>
+  <div class="main" id="main">
+    <div class="keys" id="keys"><b>Phím tắt:</b><span><kbd>1</kbd> → Chọn A</span><span><kbd>2</kbd> → Chọn B</span><span><kbd>3</kbd> → Chọn C</span><span><kbd>4</kbd> → Chọn D</span><span><kbd>Enter</kbd> → Kiểm tra/Câu hỏi tiếp theo</span><span><kbd>Esc</kbd> → Bỏ qua</span><button class="x" onclick="this.parentElement.style.display='none'">✕</button></div>
+    <div class="pus" id="pus"></div><div class="fx" id="fx"></div><div class="qc"><div class="qn" id="qn"></div><div class="qq" id="qq"></div><div class="dv"><span id="dv"></span></div><div id="opts"></div></div>
+  </div>
+  <div class="bot">
+    <button class="ib" style="border:none;background:none;color:var(--mut)" onclick="two('r',this,start)">↻ Bắt đầu lại</button>
+    <b id="pg2" style="white-space:nowrap"></b>
+    <div class="dots" id="dots2"></div>
+    <button class="chk" id="ck" onclick="act()">Kiểm tra</button>
+  </div>
+</div>
+
+<script>
+const RAW=`Câu 1. Em hãy cho biết phần mềm nào sau đây quan trọng nhất?
+A. Phần mềm vẽ
+*B. Hệ điều hành
+C. Phần mềm soạn thảo văn bản
+D. Phần mềm ứng dụng
+Câu 2. Trong các nhóm thiết bị sau, nhóm thiết bị vào là:
+A. Chuột, màn hình, loa.
+*B. Bàn phím, chuột, máy quét.
+C. Chuột, loa, máy in.
+D. Bàn phím, chuột, màn hình.
+Câu 3. Mạng xã hội thường được tổ chức dưới dạng nào?
+*A. Website
+B. Ứng dụng
+C. Internet
+D. Chương trình
+Câu 4. Trong hệ điều hành Windows muốn xem toàn bộ các phần mềm ứng dụng trong máy tính ta nhấn vào nút:
+A. Shut down
+*B. Start
+C. Log off
+D. Restart
+Câu 5. Thiết bị nào sau đây vừa là thiết bị vào vừa là thiết bị ra?
+A. Màn hình.
+*B. Màn hình cảm ứng
+C. Chuột thông minh.
+D. Tai nghe
+Câu 6. Tệp có phần mở rộng .exe thuộc loại tệp gì?
+A. Tệp dữ liệu Video
+B. Tệp dữ liệu của chương trình Microsoft Word.
+*C. Tệp chương trình máy tính.
+D. Không có loại tệp này
+Câu 7. Mật khẩu nào sau đây là mạnh nhất?
+A. 12345678
+B. pass
+*C. Ltv@1234
+D. LTV
+Câu 8. Trường hợp học sinh có thể bị đình chỉ thi và bị công an điều tra, xử lí vì hành vi nào sau đây?
+A. Dùng mạng xã hội để đe dọa người khác.
+*B. Chụp đề thi, chia sẻ đề thi lên mạng xã hội nhờ làm hộ.
+C. Nói xấu bạn trên facebook.
+D. Sử dụng mạng xã hội để nhờ người khác giải bài tập.
+Câu 9. Webcam là thiết bị dùng để:
+*A. Nhận thông tin dạng hình ảnh.
+B. Nhận thông tin dạng âm thanh.
+C. Nhận thông tin dạng âm thanh và kí tự.
+D. Nhận thông tin dạng kí tự.
+Câu 10. Những cách ứng xử nào sau đây là hợp lí khi truy cập một trang web có nội dung xấu?
+*A. Nhờ bố mẹ hoặc thầy cô hoặc người có trách nhiệm ngăn chặn truy cập trang web đó.
+B. Gửi trang web đó cho bạn bè xem.
+C. Đóng ngay trang web đó.
+D. Tiếp tục truy cập trang web đó.
+Câu 11. Khi lắp các đầu nối của thiết bị vào các cổng kết nối của máy tính không đúng thì có thể dẫn đến:
+A. Làm hỏng đầu nối của thiết bị
+B. Làm hỏng thiết bị
+C. Thiết bị không hoạt động
+*D. Cả A, B và C
+Câu 12. Biểu hiện của việc nghiện trò chơi trực tuyến là:
+*A. Tâm trạng dễ cáu gắt, lầm lì, ít nói.
+B. Thường xuyên cập nhật tin tức bản thân lên facebook.
+C. Thường xuyên xem điện thoại hay kiểm tra tin nhắn.
+D. Thường xuyên truy cập vào các mạng xã hội.
+Câu 13. Mac Os là gì?
+*A. Hệ điều hành.
+B. Phần mềm soạn thảo.
+C. Phần mềm diệt virus.
+D. Phần mềm ứng dụng.
+Câu 14. Các bộ phận chính trong sơ đồ cấu trúc máy tính gồm:
+A. Bàn phím và con chuột
+*B. CPU, bộ nhớ trong/ngoài, thiết bị vào/ra
+C. Màn hình và máy in
+D. Máy quét và ổ cứng
+Câu 15. Chọn phát biểu sai?
+A. Thư điện tử, diễn đàn, mạng xã hội, ... là những kênh trao đổi thông tin thông dụng trên Internet.
+B. Mạng xã hội giúp người sử dụng kết nối, giao lưu, chia sẻ và thảo luận các vấn đề mà họ quan tâm.
+*C. Mạng xã hội chỉ có một mặt tốt vì có rất nhiều ưu điểm.
+D. Cách thức tổ chức mạng xã hội phổ biến nhất để người sử dụng tham gia là dưới dạng các website.
+Câu 16. Thiết bị vào có chức năng gì?
+A. Hiển thị nội dung lên màn hình
+*B. Đưa thông tin vào máy tính
+C. Chuyển thông tin thành dữ liệu
+D. Đưa thông tin ra ngoài
+Câu 17. Hãy chọn những phát biểu sai?
+A. Lưu trữ bằng đĩa cứng ngoài vừa nhỏ gọn vừa có dung lượng lớn.
+*B. Lưu trữ bằng đĩa CD cần phải có đầu ghi nhưng dung lượng rất lớn.
+C. Lưu trữ bằng thẻ nhớ, USB dễ bị rơi, mất dữ liệu nhưng thuận tiện.
+D. Lưu trữ bằng công nghệ đám mây tránh được rơi, mất, hỏng dữ liệu.
+Câu 18. Mạng xã hội là gì?
+*A. Một cộng đồng trực tuyến.
+B. Một cộng đồng cùng chung mục đích.
+C. Một cộng đồng offline
+D. Một cộng đồng cùng chung sở thích.
+Câu 19. Tai nghe có gắn micro được gọi là?
+A. Thiết bị vào
+B. Thiết bị ra
+*C. Cả A, B đúng
+D. Cả A, B sai
+Câu 20. Khi giao tiếp qua mạng thì em nên làm gì:
+A. Đọc thông tin trong hộp thư của người khác.
+B. Đưa thông tin, hình ảnh của người khác lên mạng khi chưa được họ cho phép.
+C. Sử dụng ngôn ngữ, hình ảnh,... không lịch sự, lành mạnh
+*D. Tìm sự giúp đỡ của bố mẹ, thầy cô giáo khi bị bắt nạt trên mạng.
+Câu 21. Con người và máy tính giao tiếp với nhau thông qua:
+A. Đĩa cứng.
+B. Chuột.
+C. USB.
+*D. Hệ điều hành.
+Câu 22. Trong hệ điều hành Windows, để mở cửa sổ của trình quản lí hệ thống tệp ta chọn:
+A. Internet Explorer
+*B. File Explorer
+C. Microsoft Word
+D. Microsoft Excel
+Câu 23. Trong các câu nói sau, câu nào là không đúng khi nói về mạng xã hội?
+A. Một số mạng xã hội quy định độ tuổi được phép tham gia là thành viên.
+B. Người xấu có thể đưa tin giả lên mạng xã hội. Vì vậy chỉ nên trò chuyện với người mình quen biết.
+C. Mạng xã hội giúp mọi người tương tác với nhau mà không cần gặp mặt.
+*D. Tất cả các website đều là mạng xã hội.
+Câu 24. Khi giao tiếp qua mạng, điều nào sau nên làm?
+A. Nói bất cứ điều gì xuất hiện trong đầu.
+B. Kết bạn với những người mình không quen biết.
+C. Truy cập bất cứ liên kết nào nhận được.
+*D. Tôn trọng người đang giao tiếp với mình.
+Câu 25. Sao lưu cục bộ là bản sao được đặt ở đâu?
+A. Bản sao được lưu trên Google Drive
+B. Bản sao được gửi mail cho người khác
+C. Bản sao được đưa lên Internet
+*D. Bản sao được đặt trên các thiết bị lưu trữ
+Câu 26. Tên tệp và thư mục cần đặt như thế nào?
+*A. Dễ nhớ
+B. Ngắn gọn
+C. Đặt theo sách giáo khoa.
+D. Đặt theo ý thích
+Câu 27. Khi chưa có mạng Internet, phương thức giao tiếp chủ yếu của chúng ta là gì?
+*A. Gửi thư qua bưu điện.
+*B. Gọi điện thoại.
+C. Liên lạc qua Messenger
+D. Liên lạc qua Zalo
+Câu 28. Chức năng nào sau đây không phải của hệ điều hành?
+*A. Tạo và chỉnh sửa nội dung một tệp hình ảnh
+B. Quản lí các tệp dữ liệu trên đĩa
+C. Điều khiển các thiết bị vào – ra.
+D. Quản lí giao diện giữa người sử dụng và máy tính.
+Câu 29. Hệ điều hành nào dành cho điện thoại thông minh?
+*A. Windows Phone
+B. Windows 10
+C. Windows XP
+*D. Android
+Câu 30. Việc nào không nên làm khi sử dụng máy tính?
+A. Giữ tay khô, sạch khi sử dụng máy tính
+*B. Chạm vào phần kim loại của máy tính
+C. Đọc kĩ hướng dẫn trước khi sử dụng thiết bị
+D. Gõ phím dứt khoát nhưng nhẹ nhàng
+Câu 31. Em hãy cho biết phần mềm Microsoft Word thuộc loại phần mềm nào?
+A. Phần mềm hệ thống và ứng dụng
+B. Phần mềm hệ thống
+C. Không phải phần mềm
+*D. Phần mềm ứng dụng
+Câu 32. Phát biểu nào sau đây là đúng khi nói về CPU?
+A. CPU được tạo bởi RAM và ROM.
+*B. CPU là bộ xử lí trung tâm, là bộ phận quan trọng nhất của máy tính.
+C. CPU chính là bộ nhớ trong của máy tính.
+D. CPU lưu trữ các phần mềm người sử dụng.
+Câu 33. Phát biểu nào sau đây là sai?
+A. Để phần mềm ứng dụng chạy được trên máy tính phải có hệ điều hành
+B. Để máy tính hoạt động được phải có hệ điều hành
+*C. Để máy tính hoạt động được phải có phần mềm ứng dụng
+D. Người sử dụng xử lí những yêu cầu cụ thể bằng phần mềm ứng dụng
+Câu 34. Thiết bị nào là thiết bị vào?
+*A. Chuột, bàn phím.
+B. Bàn phím, loa.
+C. Loa, tai nghe.
+D. Chuột, tai nghe.
+Câu 35. Nếu em cứ khoảng 10 phút lại xem điện thoại hay kiểm tra tin nhắn trên mạng xã hội. Hành động của em thuộc tác hại nào của người nghiện Internet?
+*A. Khó tập trung vào công việc học tập.
+B. Tăng nguy cơ tham gia vào các vụ bắt nạt trên mạng.
+C. Thiếu giao tiếp với thế giới xung quanh.
+D. Dễ bị nghiện trò chơi trực tuyến.
+Câu 36. Trong các việc sau, việc nào là không nên làm khi giao tiếp qua mạng?
+*A. Đưa thông tin, hình ảnh của người khác lên mạng khi chưa được họ cho phép.
+B. Bảo vệ tài khoản cá nhân trên mạng.
+C. Sử dụng ngôn ngữ, hình ảnh, văn minh, lịch sự.
+D. Tôn trọng mọi người khi giao tiếp qua mạng.
+Câu 37. Mạng xã hội là một cộng đồng trực tuyến để mọi người có thể làm gì?
+*A. Tương tác với nhau
+B. Vẽ biểu đồ
+C. Tính toán công thức
+D. Soạn thảo văn bản
+Câu 38. Loa là thiết bị làm việc với dạng thông tin nào?
+*A. Âm thanh
+B. Video
+C. Văn bản
+D. Hình ảnh
+Câu 39. CPU làm những công việc chủ yếu nào?
+A. Xuất dữ liệu.
+B. Nhập dữ liệu.
+*C. Xử lí dữ liệu.
+D. Lưu trữ dữ liệu.
+Câu 40. Hãy chỉ ra các phần mềm ứng dụng trong các phần mềm sau:
+A. Linux
+*B. Paint
+*C. Zalo
+*D. Windows Media Player
+Câu 41. Việc lưu trữ nhờ công nghệ đám mây có nhược điểm gì?
+*A. Có thể bị tin tặc tấn công.
+B. Tốn ít chi phí
+C. Có thể xem bất cứ khi nào miễn là có Internet.
+*D. Dịch vụ có thể không đáng tin cậy.
+Câu 42. Các thiết bị: Máy quét, máy đọc chữ, đầu đọc mã vạch là:
+A. Thiết bị xử lý.
+*B. Thiết bị vào.
+C. Thiết bị lưu trữ.
+D. Thiết bị ra.
+Câu 43. Những kênh nào sau đây là kênh trao đổi thông tin trên internet?
+A. Excel
+*B. Thư điện tử.
+*C. Mạng xã hội.
+D. Word
+Câu 44. Thao tác nào sau đây tắt máy một cách an toàn?
+A. Sử dụng nút lệnh Restart của Windows
+*B. Sử dụng nút lệnh Shutdown của Windows
+C. Nhấn giữ công tắc nguồn vài giây
+D. Rút dây nguồn khỏi ổ cắm
+Câu 45. Chọn phát biểu sai?
+A. Có thể ví CPU và RAM là bộ não của máy tính.
+*B. Màn hình cảm ứng chỉ là thiết bị ra.
+C. Đầu đọc mã vạch ở quầy thu ngân các cửa hàng là thiết bị vào.
+D. Thiết bị vào và thiết bị ra cho máy tính đều rất đa dạng.
+Câu 46. Thông tin trao đổi trên kênh mạng xã hội có dạng?
+A. Hình ảnh.
+B. Văn bản.
+C. Video.
+*D. Cả A, B và C.
+Câu 47. Máy tính của em đang làm việc với một tệp trên thẻ nhớ. Em hãy sắp xếp thứ tự các thao tác sau để tắt máy an toàn, không làm mất dữ liệu? ⏎ a) Nháy nút lệnh Shut down để tắt máy. ⏎ b) Đóng tệp đang mở trên thẻ nhớ. ⏎ c) Chọn “Safe To Remove Hardware” để ngắt kết nối với thẻ nhớ. ⏎ d) Lưu lại nội dung của tệp. ⏎ Thứ tự đúng là:
+A. a-b-c-d
+*B. d-b-c-a
+C. d-a-c-b
+D. b-c-a-d
+Câu 48. Một số tác hại ảnh hưởng đến người nghiện Internet là:
+A. Có thể kinh doanh kiếm thêm thu nhập
+*B. Khó tập trung vào công việc, học tập.
+*C. Thiếu giao tiếp với thế giới xung quanh.
+D. Tăng tương tác giữa mọi người
+Câu 49. Facebook quy định độ tuổi được phép tham gia là thành viên, phổ biến là từ bao nhiêu tuổi?
+*A. 13
+B. 11
+C. 12
+D. 14
+Câu 50. Khi khởi động máy tính, phần mềm nào sẽ được thực hiện trước:
+A. Microsoft Office.
+*B. Hệ điều hành.
+C. Phần mềm gõ tiếng Việt.
+D. Phần mềm diệt virus.
+Câu 51. Mạng xã hội nào cho phép người sử dụng tải lên, sắp xếp và chia sẻ các hình ảnh của mình?
+*A. Instagram
+B. Tiktok
+C. Facebook
+D. Youtube
+Câu 52. Thiết bị ra có chức năng gì?
+*A. Đưa dữ liệu từ máy tính ra ngoài.
+B. Thu nhận thông tin
+C. Chuyển thông tin thành dữ liệu.
+D. Đưa thông tin vào máy tính.
+Câu 53. Thiết bị nào là thiết bị ra?
+*A. Loa, tai nghe.
+B. Bàn phím, loa.
+C. Chuột, bàn phím
+D. Chuột, tai nghe.
+Câu 54. Phần mềm nào sau đây bảo vệ máy tính tránh được virus máy tính?
+A. Mozilla Firefox
+B. Microsoft Edge
+C. Microsoft Word
+*D. Windows Defender
+Câu 55. Một số phương thức giao tiếp qua mạng là?
+A. Gởi thư bằng bồ câu
+*B. Nói chuyện trực tuyến thông qua các ứng dụng.
+*C. Nói chuyện trực tuyến thông qua các trang mạng xã hội.
+D. Gởi và nhận thư qua bưu điện
+Câu 56. Trong các phần mềm sau, đâu không phải là hệ điều hành?
+A. Android
+*B. Antivirus
+C. Windows
+D. Linux
+Câu 57. Khẳng định nào sau đây là đúng khi nói về máy tính xách tay?
+*A. Toàn bộ hộp thân máy, màn hình, bàn phím, chuột được tích hợp chung thành một khối, đảm nhiệm đầy đủ các chức năng của các thiết bị vào-ra bộ phận xử lí thông tin.
+B. Máy tính xách tay không có khả năng nhận thông tin vào và xuất thông tin ra dưới dạng hình ảnh, âm thanh.
+C. Bên trong máy tính thường không có loa, muốn máy tính có khả năng xuất và nhận thông tin dạng âm thanh ta phải cắm thêm bộ tai nghe kèm micro.
+D. Chuột và bàn phím của máy xách tay là tách rời và phải cắm ngoài.
+Câu 58. Máy ảnh nhập dữ liệu dạng nào vào máy tính?
+A. Âm thanh
+B. Con số
+C. Văn bản
+*D. Hình ảnh
+Câu 59. Không nên dùng mạng xã hội cho mục đích nào sau đây?
+A. Học hỏi kiến thức.
+B. Chia sẻ các hình ảnh phù hợp của mình.
+*C. Bình luận xấu về người khác.
+D. Giao lưu với bạn bè.
+Câu 60. Mật khẩu mạnh thường là
+A. Dãy ít nhất 8 kí tự
+B. Không phải là một từ thông thường.
+*C. Bao gồm cả chữ số, chữ in hoa, chữ thường và các kí hiệu đặc biệt.
+D. Cả A, B và C
+Câu 61. Đâu là hậu quả của những người bị nghiện trò chơi trực tuyến?
+A. Thường xuyên nhắn tin, gọi điện cho bạn bè.
+B. Thường xuyên giao tiếp với bạn
+C. Thường xuyên nói xấu người khác trên mạng.
+*D. Tàn phá sức khỏe và tinh thần.
+Câu 62. Thiết bị nào có thể thiếu trong một máy tính thông thường?
+A. Màn hình.
+*B. USB
+C. CPU.
+D. ROM và RAM.
+Câu 63. Cách tốt nhất em nên làm gì khi bị bắt nạt trên mạng?
+A. Đe dọa người bắt nạt mình.
+B. Nói lời xúc phạm trên mạng.
+C. Cố gắng quên đi và tiếp tục chịu đựng.
+*D. Nhờ bố mẹ, thầy cô giáo giúp đỡ, tư vấn.
+Câu 64. Theo em, hoạt động trên mạng nào sau đây dễ gây bệnh nghiện Internet nhất?
+A. Học tập trực tuyến.
+*B. Chơi trò chơi trực tuyến.
+C. Trao đổi thông tin qua hộp thư điện tử.
+D. Đọc tin tức.
+Câu 65. Thiết bị vừa là thiết bị vào và là thiết bị ra là:
+A. Loa.
+B. Chuột.
+*C. Màn hình cảm ứng.
+D. Bàn phím.`;
+
+// Phân tích dữ liệu thô thành mảng câu hỏi
+const Q=[];let bai='';
+RAW.split('\n').forEach(l=>{
+  let m;
+  if(l[0]==='#'){bai=l.slice(1);return}
+  if(m=l.match(/^Câu (\d+)\.\s*(.*)/)){Q.push({n:m[1],t:m[2].replace(/ ⏎ /g,'\n'),bai,o:[],s:[],ks:[]});return}
+  const q=Q[Q.length-1];
+  if(m=l.match(/^(\*?)([A-D])\.\s*(.*)/)){q.o.push(m[3]);if(m[1])q.ks.push(q.o.length-1);return}
+  if(m=l.match(/^([a-d])\)\s*(.*)\|([ĐS])$/)){q.s.push({t:m[1]+') '+m[2],d:m[3]==='Đ'})}
+});
+
+let cur=0,score=0,left=3600,tid;
+const $=id=>document.getElementById(id);
+
+function loadHist(){try{return JSON.parse(localStorage.getItem('azh')||'[]')}catch(e){return[]}}
+function saveHist(s,g){try{const a=loadHist();a.push({t:new Date().toLocaleString('vi-VN'),s:Math.round(s),g:(+g).toFixed(2),n:pname});localStorage.setItem('azh',JSON.stringify(a))}catch(e){}}
+function toggleHist(){
+  const h=$('hist');
+  if(!h.classList.toggle('hide')){
+    const a=loadHist();
+    h.innerHTML=a.length?a.slice().reverse().map(x=>`<div class="irow"><span>${x.t}</span><b>${x.s} điểm${x.g?' ('+x.g+'/10)':''}</b></div>`).join(''):'<p style="text-align:center;color:var(--mut)">Chưa có lượt làm bài nào.</p>';
+  }
+}
+$('iq').textContent=Q.length;
+$('il').textContent=loadHist().length+' lượt';
+
+const C=document.querySelector('.container');
+let pname='';
+let admin=false,prem=false,pAns=3,pTime=3,sels=[];
+function pr(){
+  $('pa').textContent='✨ Trả lời đúng ngay ('+pAns+')';
+  $('pt').textContent='⏱ +5 phút ('+pTime+')';
+  $('pa').disabled=pAns<=0||checked;$('pt').disabled=pTime<=0;
+}
+function premAns(){if(pAns<=0||checked)return;pAns--;admAuto();pr()}
+function premTime(){if(pTime<=0)return;pTime--;left+=300;pr()}
+const THEMES=[['auto','Tự động','linear-gradient(135deg,#fff 50%,#16181c 50%)'],['light','Sáng','#f0f2f5'],['dark','Tối','#16181c'],['ocean','Đại dương','#0077b6'],['sakura','Anh đào','#d6336c'],['forest','Rừng xanh','#2f7d4f'],['sunset','Hoàng hôn','#e8590c'],['night','Đêm tím','#a78bfa'],['roblox','Roblox Retro','linear-gradient(135deg,#78c0ff 50%,#2e8f3a 50%)'],['golden','Golden','linear-gradient(135deg,#ffe8a3,#d4a017)']];
+const WG=[['wayground','Dâu tím','linear-gradient(135deg,#5b0f3e 50%,#ff7ac0 50%)'],['wg-ocean','Biển xanh','linear-gradient(135deg,#0b4a8f 50%,#6ec1ff 50%)'],['wg-forest','Rừng xanh','linear-gradient(135deg,#0f5a3a 50%,#7be0a6 50%)'],['wg-sunset','Hoàng hôn','linear-gradient(135deg,#b3380f 50%,#ffb066 50%)'],['wg-night','Đêm sao','linear-gradient(135deg,#1d1550 50%,#b9a4ff 50%)'],['wg-candy','Kẹo ngọt','linear-gradient(135deg,#7b2ff7 50%,#f107a3 50%)']];
+const FONTS=[['Mặc định',"'Segoe UI',Tahoma,sans-serif"],['Be Vietnam Pro',"'Be Vietnam Pro',sans-serif"],['Nunito',"'Nunito',sans-serif"],['Lexend',"'Lexend',sans-serif"],['Inter',"'Inter',sans-serif"],['Quicksand',"'Quicksand',sans-serif"],['Merriweather (có chân)',"'Merriweather',serif"],['Patrick Hand (viết tay)',"'Patrick Hand',cursive"]];
+let curT='auto',tab=0;
+function rth(){$('themes').innerHTML=(tab?WG:THEMES).map(x=>`<button class="swb" data-t="${x[0]}" onclick="setTheme('${x[0]}')"><i style="background:${x[2]}"></i>${x[1]}</button>`).join('');[...$('themes').children].forEach(b=>b.classList.toggle('on',b.dataset.t===curT));[...$('tabs').children].forEach((b,i)=>b.classList.toggle('on',i===tab))}
+function setTab(n){tab=n;rth()}
+function setTheme(t){const r=document.documentElement,w=WG.some(x=>x[0]===t);t==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',t);w?r.setAttribute('data-wg',''):r.removeAttribute('data-wg');try{localStorage.setItem('azt',t)}catch(e){}curT=t;tab=w?1:0;rth()}
+function setFont(i){i=+i;if(!FONTS[i])i=0;i?document.documentElement.style.setProperty('--ff',FONTS[i][1]):document.documentElement.style.removeProperty('--ff');try{localStorage.setItem('azf',i)}catch(e){}$('fontSel').value=i}
+function togStg(){const p=$('stg');p.style.display=p.style.display==='none'?'block':'none'}
+function prog(){
+  $('qprog').firstElementChild.style.width=(cur/Q.length*100)+'%';
+  const c=document.querySelector('.qc');c.style.animation='none';void c.offsetHeight;c.style.animation='up .35s ease';
+}
+function confetti(){
+  const e=['🎉','✨','🎊','⭐','🌟'];
+  for(let i=0;i<40;i++){const p=document.createElement('div');p.textContent=e[i%5];p.className='cf';p.style.cssText=`left:${Math.random()*100}vw;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()}s;font-size:${16+Math.random()*16}px`;document.body.append(p);setTimeout(()=>p.remove(),6000)}
+}
+$('fontSel').innerHTML=FONTS.map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('');
+try{setTheme(localStorage.getItem('azt')||'auto');setFont(localStorage.getItem('azf')||0)}catch(e){setTheme('auto');setFont(0)}
+function mix(){
+  const sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  sh(Q);
+  Q.forEach(q=>{if(!q.s.length&&!q.o.some(x=>/Cả A|A, B/.test(x))){const c=q.ks.map(i=>q.o[i]);sh(q.o);q.ks=c.map(t=>q.o.indexOf(t))}});
+}
+async function delName(name){
+  if(!SB_URL)return;
+  try{await fetch(SBB+'/rest/v1/rpc/delete_score',{method:'POST',headers:SBH,body:JSON.stringify({p_name:name})})}catch(e){}
+  showLB();
+}
+function chkAdm(){
+  const v=$('name').value.trim(),a=v==='LocalAdminUser',p=/^\[premium\]/i.test(v);
+  $('pwbox').style.display=(a||p)?'block':'none';
+  $('dn').style.display=a?'block':'none';
+  $('pw').placeholder=a?'Nhập mật khẩu admin':'Nhập mật khẩu Premium';
+}
+function admSkip(){rs[cur]=rs[cur]||'sk';next()}
+function admAuto(){if(checked)return;const q=Q[cur];if(q.s.length)q.s.forEach((x,i)=>tfp(i,x.d));else{sels=[];q.ks.forEach(k=>pk(k))}check()}
+function admPlus(){score=Math.min(Q.length,score+1);upd()}
+function admSet(){const v=parseFloat($('sp').value);if(isNaN(v))return;score=Math.max(0,Math.min(10,v))/10*Q.length;upd()}
+// Dán thông tin Supabase vào đây (Project Settings → API)
+const SB_URL='https://rdqbykjdjekezvnzeruu.supabase.co';  // ví dụ: https://abcdxyz.supabase.co
+const SB_KEY='sb_publishable_8tTRQ9ZAWe_gUizr5KmQHQ_tvEcXCex';  // anon public key (KHÔNG dùng service_role)
+const LBURL='leaderboard.json';
+const SBH={apikey:SB_KEY,'Content-Type':'application/json'};
+if(SB_KEY.startsWith('eyJ'))SBH.Authorization='Bearer '+SB_KEY; // khóa anon cũ (JWT); khóa sb_publishable_ chỉ cần apikey
+const SBB=SB_URL.replace(/\/$/,'');
+async function saveLB(d){
+  if(!SB_URL)return;
+  try{
+    await fetch(SBB+'/rest/v1/rpc/submit_score',{
+      method:'POST',
+      headers:SBH,
+      body:JSON.stringify({
+        p_name: pname,
+        p_score: Math.round(points), // Điểm tổng (points)
+        p_bonus_score: 0,            // Thay số 0 bằng biến điểm bonus thực tế của bạn nếu có
+        p_correct: +score.toFixed(2) // Số câu đúng (thang điểm 10)
+      })
+    });
+  }catch(e){}
+}
+const PU={x2:['✖2','2X','Nhân đôi điểm câu đúng kế tiếp'],sp:['⚡','Supersonic','x1.5 trong 20s nếu trả lời dưới 10s'],dj:['🎲','Double Jeopardy','Đúng x2, sai mất 600 điểm'],sb:['🔥','Streak Booster','+2 chuỗi'],pp:['🚀','Power Play','x1.5 điểm trong 20s'],ff:['🎯','50-50','Bỏ 2 đáp án sai'],er:['🧽','Eraser','Bỏ 1 đáp án sai'],tf:['❄️','Time Freeze','Dừng đồng hồ câu này'],im:['🛡️','Immunity','Được thử lại 1 lần'],sv:['🧷','Streak Saver','Bảo vệ chuỗi 1 lần sai'],bc:['⏱','Bonus Clock','+60 giây']};
+const KEYS=Object.keys(PU),pool=r=>Array.from({length:3},(_,i)=>KEYS[(off+r*3+i)%KEYS.length]),rnd1=a=>a[Math.floor(Math.random()*a.length)];
+let loadout=[],rolls=3,off=0;
+function roll(f){if(!f){if(rolls<1)return;rolls--}off=Math.floor(Math.random()*KEYS.length);loadout=pool(0).slice();preR()}
+function preR(){$('pre').innerHTML='<b>🎁 Power-up khởi đầu</b><div>'+loadout.map(k=>'<span class="chip" title="'+PU[k][2]+'">'+PU[k][0]+' '+PU[k][1]+'</span>').join('')+'</div><button class="hb" style="margin-top:8px" onclick="roll()" '+(rolls<1?'disabled':'')+'>🎲 Random lại ('+rolls+')</button>'}
+const on=k=>(k==='x2'&&dbl)||(k==='sv'&&svOn)||(k==='dj'&&djOn)||(k==='im'&&immOn);
+function pop(t){const e=document.createElement('div');e.className='fpop';e.textContent=t;document.body.append(e);setTimeout(()=>e.remove(),1200)}
+function pur(){const r=Math.floor(cur/15);$('pus').innerHTML='<div class="lbh">Vòng '+(r+1)+' · power-up đổi mỗi 15 câu</div>'+pool(r).map(k=>'<button class="ib'+(on(k)?' on':'')+'" title="'+PU[k][2]+'" data-k="'+k+'" onclick="usePU(this.dataset.k)" '+((pu[k]||0)<1||checked?'disabled':'')+'>'+PU[k][0]+' '+PU[k][1]+' ×'+(pu[k]||0)+'</button>').join('');fxr()}
+function fxr(){const n=Date.now(),c=[];
+  if(n<sup)c.push('⚡ Supersonic '+Math.ceil((sup-n)/1000)+'s');
+  if(n<pow)c.push('🚀 Power Play '+Math.ceil((pow-n)/1000)+'s');
+  if(frozen&&!checked)c.push('❄️ Đồng hồ dừng');
+  if(dbl)c.push('✖2 sẵn sàng');if(djOn)c.push('🎲 Jeopardy');if(svOn)c.push('🧷 Giữ chuỗi');if(immOn)c.push('🛡️ Miễn nhiễm');
+  const f=$('fx');if(f)f.innerHTML=c.map(x=>'<span class="chip">'+x+'</span>').join('');
+}
+function rcheck(){if(cur>0&&cur%15===0&&lastR!==cur){lastR=cur;pu={};const p=pool(cur/15);for(let i=0;i<2;i++){const k=rnd1(p);pu[k]=(pu[k]||0)+1}pop('🔄 Vòng '+(cur/15+1)+': power-up mới!')}}
+function usePU(k){
+  if(checked||(pu[k]||0)<1)return;const q=Q[cur];
+  const wrong=()=>q.o.map((_,i)=>i).filter(i=>!q.ks.includes(i)&&!$('o'+i).disabled);
+  if(k==='ff'||k==='er'){const n=k==='ff'?2:1;if(q.s.length||q.ks.length!==1||wrong().length<n)return;
+    wrong().sort(()=>Math.random()-.5).slice(0,n).forEach(i=>{const b=$('o'+i);b.disabled=true;b.style.opacity=.25;b.classList.remove('sel');sels=sels.filter(x=>x!==i)});$('ck').disabled=!sels.length}
+  else if(k==='x2'){if(dbl)return;dbl=true}
+  else if(k==='dj'){if(djOn)return;djOn=true}
+  else if(k==='sv'){if(svOn)return;svOn=true}
+  else if(k==='im'){if(immOn)return;immOn=true}
+  else if(k==='tf'){if(frozen)return;frozen=true}
+  else if(k==='sp')sup=Date.now()+20000;
+  else if(k==='pp')pow=Date.now()+20000;
+  else if(k==='sb')streak+=2;
+  else left+=60;
+  pu[k]--;pop(PU[k][0]+' '+PU[k][1]);pur();upd()}
+function grant(){if(Object.values(pu).reduce((a,b)=>a+b,0)>=8)return;const k=rnd1(pool(Math.floor(cur/15)));pu[k]=(pu[k]||0)+1;setTimeout(()=>{pop('🎁 '+PU[k][0]+' '+PU[k][1]);pur()},900)}
+function award(fr){
+  const now=Date.now(),t=(now-qT)/1000;let g=fr>0?Math.round((600+Math.round(400*Math.max(0,1-t/30)))*fr):0,m=1;
+  if(fr>=1){streak++;g+=Math.min(streak,5)*50;if(streak%3===0)grant()}
+  else if(svOn){svOn=false;pop('🧷 Giữ chuỗi!')}else streak=0;
+  if(g>0){if(dbl)m*=2;if(djOn)m*=2;if(now<sup&&t<10)m*=1.5;if(now<pow)m*=1.5;g=Math.round(g*m)}
+  else if(djOn)g=-600;
+  dbl=djOn=false;points=Math.max(0,points+g);
+  pop(g<0?String(g):'+'+g.toLocaleString('vi-VN')+(streak>1?' 🔥'+streak:''))}
+roll(true);
+async function showLB(){
+  const box=$('lb');box.textContent='Đang tải...';
+  try{
+    let a;
+    if(SB_URL){const r=await fetch(SBB+'/rest/v1/leaderboard?select=name,score&order=score.desc&limit=50',{headers:SBH});if(!r.ok)throw 0;a=Object.values(await r.json()||{})}
+    else{const m={};loadHist().forEach(x=>{const n=x.n||'Bạn',v=+x.s;if(!(m[n]>=v))m[n]=v});a=Object.keys(m).map(n=>({name:n,score:m[n]}))}
+    a=a.sort((x,y)=>y.score-x.score);const tot=a.length,my=a.findIndex(x=>x.name===pname);a=a.slice(0,50);const top=Math.max(1,+(a[0]&&a[0].score)||1);
+    box.innerHTML='';
+    if(!a.length){box.textContent='Chưa có ai trên bảng.';return}
+    box.append(Object.assign(document.createElement('div'),{className:'lbh',textContent:'👥 '+tot+' người chơi'+(my>=0?' · Hạng của bạn: #'+(my+1):'')}));
+    const mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.textContent=h;return e};
+    const cl=n=>String(n).replace(/^\[(premium|admin)\]\s*/i,'');
+    const hue=n=>{let h=0;for(const ch of n)h=(h*31+ch.charCodeAt(0))%360;return h};
+    const av=n=>{const e=mk('span','lb-av',([...cl(n).trim()][0]||'?').toUpperCase());e.style.background='hsl('+hue(n)+' 65% 48%)';return e};
+    const delBtn=(x,i)=>{if(!((x.name===pname||admin)&&SB_URL))return null;const b=mk('button','ib lb-del','🗑');b.title='Xóa';b.onclick=()=>two('del'+i,b,()=>delName(x.name));return b};
+    const nm=(cls,x,me)=>{
+      const e=mk('div',cls),m=String(x.name||'').match(/^\[(premium|admin)\]\s*(.*)$/i);
+      let t=x.name||'Ẩn danh';
+      if(m){const k=m[1].toLowerCase();e.append(mk('span','tag '+k,k==='premium'?'Premium':'Admin'),' ');t=m[2]||'Ẩn danh'}
+      e.append(t+(me?' (bạn)':''));return e};
+    const sc=x=>Math.round(+x.score).toLocaleString('vi-VN');
+    const pod=mk('div','lb-pod');
+    [1,0,2].forEach(i=>{
+      const x=a[i];if(!x)return;
+      const me=x.name===pname,c=mk('div','lb-pc p'+(i+1));
+      c.append(mk('div','lb-medal',['🥇','🥈','🥉'][i]),av(x.name),nm('lb-pn',x,me),mk('div','lb-ps',sc(x)));
+      const d=delBtn(x,i);if(d)c.append(d);
+      c.append(mk('div','lb-bar',String(i+1)));
+      pod.append(c);
+    });
+    box.append(pod);
+    a.slice(3).forEach((x,k)=>{
+      const i=k+3,me=x.name===pname,row=mk('div','lb-row'+(me?' me':'')),bar=mk('div','lb-sc'),fill=mk('i'),mid=mk('div','lb-mid');
+      fill.style.width=Math.max(0,Math.min(100,x.score/top*100))+'%';bar.append(fill);
+      mid.append(nm('lb-nm',x,me),bar);
+      row.append(mk('span','lb-rk',String(i+1)),av(x.name),mid,mk('b','lb-pt',sc(x)));
+      const d=delBtn(x,i);if(d)row.append(d);
+      box.append(row);
+    });
+  }catch(e){box.textContent='Không tải được bảng xếp hạng.'}
+}
+try{$('name').value=localStorage.getItem('azn')||''}catch(e){}
+try{$('dn').value=localStorage.getItem('azd')||''}catch(e){}
+chkAdm();
+let points=0,streak=0,dbl=false,svOn=false,ffU=false,qT=0,pu={},sup=0,pow=0,djOn=false,immOn=false,retried=false,frozen=false,glEnd=0,lastR=-1,rivals=[],wr=[],sel=null,tfs=[],checked=false,zoom=1,snd=true,rs=[],armed=null;
+function two(k,el,fn){if(armed===k){armed=null;fn();return}armed=k;const t=el.textContent;el.textContent='Bấm lại để xác nhận';setTimeout(()=>{armed=null;el.textContent=t},3000)}
+function zm(d){zoom=Math.min(1.5,Math.max(1,+(zoom+d).toFixed(1)));$('main').style.zoom=zoom;$('zo').disabled=zoom<=1}
+function fs(){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}}
+function beep(ok){if(!snd)return;try{const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?880:220;g.gain.value=.08;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.15)}catch(e){}}
+function fmt(s){const p=n=>String(n).padStart(2,'0');return p(Math.floor(s/3600))+' : '+p(Math.floor(s%3600/60))+' : '+p(s%60)}
+function upd(){$('ls2').textContent='⭐ '+Math.round(points).toLocaleString('vi-VN')+(streak>1?'  🔥'+streak:'')+' · '+(score/Q.length*10).toFixed(2)+'/10'}
+function dots(){$('dots2').innerHTML=Q.map((_,i)=>`<i class="dot ${i===cur?'cur':rs[i]||''}"></i>`).join('');const c=$('dots2').children[cur];if(c)c.scrollIntoView({inline:'center',block:'nearest'})}
+function show(){
+  const q=Q[cur],tf=q.s.length>0;
+  sel=null;sels=[];tfs=tf?q.s.map(()=>null):[];checked=false;
+  $('qn').textContent='Câu '+(cur+1);$('qq').textContent=q.t;
+  $('dv').textContent=tf?'Chọn Đúng hoặc Sai cho mỗi ý':(q.ks.length>1?'Chọn '+q.ks.length+' đáp án đúng':'Chọn một đáp án đúng');
+  $('opts').innerHTML=tf?q.s.map((s,i)=>`<div class="st"><p>${s.t}</p><div class="tfr"><button class="oi" id="t${i}y" onclick="tfp(${i},true)"><span class="ol">Đ</span><span class="ot">Đúng</span></button><button class="oi" id="t${i}n" onclick="tfp(${i},false)"><span class="ol">S</span><span class="ot">Sai</span></button></div></div>`).join(''):q.o.map((o,i)=>`<button class="oi" id="o${i}" onclick="pk(${i})"><span class="ol">${'ABCD'[i]}</span><span class="ot">${o}</span></button>`).join('');
+  $('pg2').textContent=`Câu ${cur+1}/${Q.length}`;
+  $('ck').textContent='Kiểm tra';$('ck').disabled=true;$('main').scrollTop=0;
+  upd();dots();prog();pr();qT=Date.now();frozen=false;retried=false;rcheck();pur();
+}
+function pk(i){
+  if(checked||($('o'+i)&&$('o'+i).disabled))return;
+  if(Q[cur].ks.length>1){const j=sels.indexOf(i);j<0?sels.push(i):sels.splice(j,1)}else sels=[i];
+  for(let j=0;j<4;j++){const b=$('o'+j);if(b)b.classList.toggle('sel',sels.includes(j))}
+  $('ck').disabled=!sels.length;
+}
+function tfp(i,v){if(checked)return;tfs[i]=v;$('t'+i+'y').classList.toggle('sel',v===true);$('t'+i+'n').classList.toggle('sel',v===false);$('ck').disabled=tfs.some(x=>x===null)}
+function act(){checked?next():check()}
+function check(){
+  const q=Q[cur],n=q.s.length,s0=score;
+  if(immOn&&!retried){const ok=n?tfs.every((v,i)=>v===q.s[i].d):(sels.length===q.ks.length&&q.ks.every(k=>sels.includes(k)));
+    if(!ok){retried=true;immOn=false;
+      if(n){tfs=q.s.map(()=>null);$('opts').querySelectorAll('.oi').forEach(b=>b.classList.remove('sel'))}
+      else{sels.filter(i=>!q.ks.includes(i)).forEach(i=>{const b=$('o'+i);b.disabled=true;b.style.opacity=.25;b.classList.add('no')});sels=sels.filter(i=>q.ks.includes(i));for(let j=0;j<4;j++){const b=$('o'+j);if(b)b.classList.toggle('sel',sels.includes(j))}}
+      $('ck').disabled=n?true:!sels.length;pop('🛡️ Thử lại!');pur();return}}
+  checked=true;let r;
+  $('opts').querySelectorAll('.oi').forEach(b=>b.disabled=true);
+  if(n){
+    let c=0;
+    q.s.forEach((s,i)=>{$('t'+i+(s.d?'y':'n')).classList.add('ok');if(tfs[i]===s.d)c++;else $('t'+i+(tfs[i]?'y':'n')).classList.add('no')});
+    score+=c/n;r=c===n?'ok':c?'pt':'no';
+  }else{
+    const ks=q.ks;let hit=0,bad=0;
+    ks.forEach(k=>$('o'+k).classList.add('ok'));
+    sels.forEach(i=>{if(ks.includes(i))hit++;else{bad++;$('o'+i).classList.add('no')}});
+    const f=Math.max(0,(hit-bad)/ks.length);
+    score+=f;r=f===1?'ok':f>0?'pt':'no';
+  }
+  rs[cur]=r;award(score-s0);if(r!=='ok')wr.push(q);beep(r==='ok');
+  $('ck').textContent=cur===Q.length-1?'Nộp bài':'Câu tiếp theo';$('ck').disabled=false;
+  upd();dots();pr();pur();
+}
+function skip(){if(checked)return;streak=0;rs[cur]='sk';wr.push(Q[cur]);next()}
+function next(){++cur<Q.length?show():finish()}
+function tick(){if(!frozen)left--;fxr();$('tm2').textContent=fmt(Math.max(left,0));if(left<=0)finish()}
+function start(){
+  const first=$('intro').style.display!=='none',v=$('name').value.trim();
+  if(first&&!v){$('name').focus();$('name').style.borderColor='#dc3545';$('name').placeholder='Vui lòng nhập tên thí sinh';return}
+  if(first){
+    if(v==='LocalAdminUser'){
+      const pw=$('pw').value;
+      if(pw!=='adminonly@123'){$('pwbox').style.display='block';$('pwerr').textContent=pw?'Sai mật khẩu':'Vui lòng nhập mật khẩu admin';$('pw').focus();return}
+      if(!$('dn').value.trim()){$('pwerr').textContent='Vui lòng nhập tên hiển thị trên bảng xếp hạng';$('dn').focus();return}
+      admin=true;
+    }else if(/^\[premium\]\s*\S/i.test(v)){
+      const pw=$('pw').value;
+      if(pw!=='premiumisgood'){$('pwbox').style.display='block';$('pwerr').textContent=pw?'Sai mật khẩu Premium':'Vui lòng nhập mật khẩu Premium';$('pw').focus();return}
+      admin=false;prem=true;
+    }else{admin=false;prem=false}
+  }
+  $('adm').style.display=admin?'flex':'none';
+  $('prm').style.display=(prem&&!admin)?'flex':'none';
+  if(v){pname=v;try{localStorage.setItem('azn',v)}catch(e){}}
+  if(admin){const d=$('dn').value.trim();try{localStorage.setItem('azd',d)}catch(e){}pname='[Admin]'+d}
+  else if(prem&&/^\[premium\]\s*\S/i.test(v))pname='[Premium]'+v.replace(/^\[premium\]\s*/i,'').trim();
+  else pname=pname.replace(/^\[(admin|premium)\]\s*/i,'');
+  $('nm').textContent=pname.replace(/^\[(admin|premium)\]\s*/i,'');
+  clearInterval(tid);cur=0;score=0;left=3600;rs=[];wr=[];points=0;streak=0;dbl=svOn=djOn=immOn=frozen=false;sup=pow=glEnd=0;lastR=-1;pu={};loadout.forEach(k=>pu[k]=(pu[k]||0)+1);mix();pAns=3;pTime=3;C.style.display='none';$('gear').style.display='none';$('stg').style.display='none';$('qz').style.display='flex';$('tm2').textContent=fmt(left);tid=setInterval(tick,1000);show()}
+function finish(){
+  clearInterval(tid);$('qz').style.display='none';C.style.display='block';$('gear').style.display='block';$('intro').style.display='none';$('res').style.display='block';
+  const d=score/Q.length*10;saveHist(points,d);saveLB(d).then(showLB);C.style.maxWidth='900px';if(d>=8)confetti();showRV();
+  $('sc').innerHTML='⭐ '+Math.round(points).toLocaleString('vi-VN')+' điểm<div style="font-size:14px;font-weight:400;color:var(--mut)">Thang 10: '+d.toFixed(2)+'</div>';
+  $('cc').textContent=`Đạt ${+score.toFixed(2)} / ${Q.length} câu (câu đúng – sai tính theo từng ý)`;
+}
+function showRV(){
+  const b=$('rv');
+  if(!wr.length){b.innerHTML='<p style="text-align:center">🎯 Hoàn hảo – không có câu nào cần xem lại!</p>';return}
+  b.innerHTML='<h3>📝 Câu cần xem lại ('+wr.length+')</h3>'+wr.map(q=>'<div class="rvc"><div class="qs">Câu '+q.n+'. '+q.t+'</div><div class="an">✔ '+(q.s.length?q.s.map(x=>x.t+' → '+(x.d?'Đúng':'Sai')).join('\n'):q.ks.map(i=>q.o[i]).join('\n✔ '))+'</div></div>').join('');
+}
+document.addEventListener('keydown',e=>{
+  if($('qz').style.display!=='flex')return;
+  if(e.key>='1'&&e.key<='4'){const i=+e.key-1;if(!Q[cur].s.length&&i<Q[cur].o.length)pk(i)}
+  else if(e.key==='Enter'){e.preventDefault();if(!$('ck').disabled)act()}
+  else if(e.key==='Escape')skip();
+});
+</script>
+</body>
+</html>

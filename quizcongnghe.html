@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Azota – Trắc nghiệm Trồng trọt</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f0f2f5;--card:#fff;--tx:#333;--mut:#666;--bd:#ddd;--op:#f8f9fa;--hv:#eef5ff;--pri:#0066cc;--ok-bg:#d4edda;--ok-bd:#28a745;--ok-tx:#155724;--no-bg:#f8d7da;--no-bd:#dc3545;--no-tx:#721c24}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#16181c;--card:#22252b;--tx:#e8e8e8;--mut:#a0a4ab;--bd:#3a3e46;--op:#2b2f36;--hv:#1f3350;--pri:#5aa2ff;--ok-bg:#1d3a27;--ok-tx:#9ee2b0;--no-bg:#40222a;--no-tx:#f1a7b0}}
+html,body{height:auto}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--tx);margin:0;padding:20px}
+.container{max-width:640px;background:var(--card);padding:30px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);margin:30px auto;position:relative}
+.timer{position:absolute;top:16px;right:16px;background:#ff4d4d;color:#fff;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:14px}
+h1{color:var(--pri);text-align:center;margin:10px 0 4px;font-size:24px}
+.sub{text-align:center;color:var(--mut);font-size:14px;margin-bottom:6px}
+.bar{height:6px;background:var(--bd);border-radius:3px;margin:10px 0 20px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pri);width:0;transition:width .3s}
+.tag{display:inline-block;font-size:12px;color:var(--pri);border:1px solid var(--pri);border-radius:10px;padding:2px 8px;margin-bottom:10px}
+.qt{font-size:18px;font-weight:600;margin-bottom:16px}
+.opt{display:block;width:100%;text-align:left;padding:12px 15px;margin:10px 0;background:var(--op);color:var(--tx);border:1px solid var(--bd);border-radius:8px;cursor:pointer;font-size:16px;font-family:inherit}
+.opt:hover:not(:disabled){background:var(--hv);border-color:var(--pri)}
+.opt.ok{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-tx);font-weight:bold}
+.opt.no{background:var(--no-bg);border-color:var(--no-bd);color:var(--no-tx)}
+.st{padding:10px 0;border-bottom:1px solid var(--bd)}
+.st p{margin:0 0 8px;font-size:16px}
+.st .row{display:flex;gap:10px}
+.st .opt{margin:0;text-align:center;padding:8px}
+.nav{margin-top:22px;text-align:right}
+.btn{padding:10px 25px;background:var(--pri);color:#fff;border:none;border-radius:6px;font-size:16px;cursor:pointer;font-weight:bold}
+#res{display:none;text-align:center}
+.score{font-size:32px;font-weight:bold;color:#ff9900;margin:15px 0}
+.hide{display:none}
+#intro h2{text-align:center;font-size:20px;margin:6px 0 14px}
+.code{text-align:center;font-size:14px;margin-bottom:22px}
+.irow{display:flex;justify-content:space-between;padding:9px 0;font-size:15px}
+.irow span{color:var(--mut)}
+.go{display:block;width:100%;margin-top:18px;padding:12px;background:#fa7316;color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
+.go:hover{background:#e0620b}
+.hb{display:block;margin:16px auto 0;padding:9px 18px;background:var(--op);color:var(--mut);border:1px solid var(--bd);border-radius:8px;font-weight:600;cursor:pointer;font-family:inherit}
+#hist{margin-top:12px;max-height:220px;overflow-y:auto}
+.adm{display:none;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 16px;background:#fff3cd;color:#664d03;border-bottom:1px solid #ffe69c;font-size:13px}
+.adm .ib{padding:6px 10px;font-size:13px;background:#fff;color:#333;border-color:#ddd}
+.adm input{width:70px;padding:6px;border:1px solid #ddd;border-radius:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.two .l{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px}
+.two .r{border-left:1px solid var(--bd);padding-left:24px;text-align:left}
+@media(max-width:640px){.two{grid-template-columns:1fr}.two .r{border-left:none;padding-left:0}}
+#qz{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;z-index:5;font-size:14px}
+.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--card);border-bottom:1px solid var(--bd);font-weight:600}
+.tb{display:flex;align-items:center;gap:8px}
+.ib{background:var(--op);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:14px;font-family:inherit}
+.ib:disabled{opacity:.45;cursor:default}
+.main{flex:1;overflow-y:auto;padding:14px}
+.keys{background:var(--card);border-radius:8px;padding:12px 40px 12px 16px;font-size:13px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;position:relative;margin-bottom:14px}
+.keys kbd{background:var(--op);border:1px solid var(--bd);border-radius:4px;padding:2px 8px;font-family:monospace}
+.keys .x{position:absolute;top:8px;right:8px;background:var(--no-bg);color:var(--no-bd);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer}
+.qc{background:var(--card);border-radius:8px;padding:16px 12px}
+.qn{font-weight:700}
+.qq{font-weight:600;margin:4px 0 12px}
+.dv{display:flex;align-items:center;color:var(--mut);margin:12px 0 18px}
+.dv:before,.dv:after{content:"";flex:1;border-top:1px solid var(--bd)}
+.dv span{padding:0 20px}
+.oi{display:flex;align-items:center;gap:12px;margin:10px 0;cursor:pointer;background:none;border:none;padding:0;color:var(--tx);font-family:inherit;font-size:14px;text-align:left}
+.oi:disabled{cursor:default}
+.ol{width:40px;height:40px;flex:none;border:1px solid var(--tx);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600}
+.ot{border:1px solid var(--tx);border-radius:6px;padding:9px 10px}
+.oi.sel .ol{background:var(--pri);color:#fff;border-color:var(--pri)}
+.oi.sel .ot{border-color:var(--pri);color:var(--pri)}
+.oi.ok .ol,.oi.ok .ot{background:var(--ok-bg);border-color:var(--ok-bd);color:var(--ok-tx)}
+.oi.no .ol,.oi.no .ot{background:var(--no-bg);border-color:var(--no-bd);color:var(--no-tx)}
+.tfr{display:flex;gap:18px}
+.qc .st p{font-size:14px}
+.bot{display:flex;align-items:center;gap:16px;padding:12px 16px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--bd)}
+.dots{flex:1;display:flex;gap:8px;overflow-x:auto;padding:4px 0}
+.dot{width:10px;height:10px;flex:none;border:1.5px solid #8a94a6;border-radius:50%;box-sizing:border-box}
+.dot.cur{border-color:var(--pri);background:var(--pri)}
+.dot.ok{background:var(--ok-bd);border-color:var(--ok-bd)}
+.dot.no{background:var(--no-bd);border-color:var(--no-bd)}
+.dot.pt{background:#ff9900;border-color:#ff9900}
+.dot.sk{background:#8a94a6}
+.chk{padding:12px 28px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap}
+.chk:disabled{opacity:.45;cursor:default}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="timer" id="tm" style="display:none">⏱️ 60:00</div>
+  <div id="intro">
+    <h2>Ôn Tập Giữa kì Môn Công nghệ</h2>
+    <div class="code">Mã đề thi: <b>cbvnkp</b></div>
+    <div class="irow"><span>🕒 Thời gian làm bài</span><b>60 phút</b></div>
+    <div class="irow"><span>❓ Số lượng câu hỏi</span><b id="iq"></b></div>
+    <div class="irow"><span>📋 Loại đề</span><b>Hỗn hợp</b></div>
+    <div class="irow"><span>👥 Tổng lượt đã làm của đề</span><b id="il"></b></div>
+    <input id="name" type="text" maxlength="40" placeholder="Nhập tên thí sinh" oninput="chkAdm()" style="display:block;width:100%;box-sizing:border-box;margin-top:16px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit">
+    <div id="pwbox" style="display:none"><input id="pw" type="password" placeholder="Nhập mật khẩu admin" style="display:block;width:100%;box-sizing:border-box;margin-top:10px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit"><input id="dn" type="text" maxlength="40" placeholder="Tên hiển thị trên bảng xếp hạng" style="display:block;width:100%;box-sizing:border-box;margin-top:10px;padding:12px;border:1px solid var(--bd);border-radius:8px;background:var(--op);color:var(--tx);font-size:15px;font-family:inherit"><div id="pwerr" style="color:#dc3545;font-size:13px;margin-top:6px"></div></div>
+    <button class="go" onclick="start()">Bắt đầu luyện tập ›</button>
+    <button class="hb" onclick="toggleHist()">Xem lịch sử làm bài</button>
+    <div id="hist" class="hide"></div>
+  </div>
+  <div id="quiz" style="display:none">
+    <h1>Azota Kiểm Tra</h1>
+    <div class="sub" id="pg"></div>
+    <div class="sub" id="ls" style="font-weight:bold;color:#ff9900"></div>
+    <div class="bar"><i id="pb"></i></div>
+    <div id="qa"></div>
+    <div class="nav"><button class="btn hide" id="nx" onclick="next()">Câu tiếp theo ➔</button></div>
+  </div>
+  <div id="res">
+    <div class="two"><div class="l">
+    <h2>🎉 Đã hoàn thành bài thi!</h2>
+    <div class="score" id="sc"></div>
+    <p id="cc"></p>
+    <button class="btn" onclick="location.reload()">Làm lại bài</button>
+    </div><div class="r"><h3 style="margin:0 0 6px">🏆 Bảng xếp hạng</h3>
+    <div id="lb"></div></div></div>
+  </div>
+</div>
+<div id="qz">
+  <div class="top">
+    <button class="ib" onclick="two('b',this,()=>location.reload())">‹ Quay lại</button>
+    <div style="text-align:center">Thí sinh: <span id="nm"></span><div id="ls2" style="color:#ff9900;font-size:13px"></div></div>
+    <div class="tb"><span>⏱ <b id="tm2"></b></span>
+      <button class="ib" id="zo" onclick="zm(-.1)" disabled>−</button><button class="ib" onclick="zm(.1)">+</button><button class="ib" onclick="snd=!snd;this.textContent=snd?'🔊':'🔇'">🔊</button><button class="ib" onclick="fs()">⛶</button></div>
+  </div>
+  <div class="adm" id="adm"><b>🛠 Admin:</b>
+    <button class="ib" onclick="admSkip()">⏭ Bỏ qua ngay</button>
+    <button class="ib" onclick="admAuto()">✔ Tự trả lời đúng</button>
+    <button class="ib" onclick="admPlus()">＋1 câu đúng</button>
+    <input id="sp" type="number" min="0" max="10" step="0.1" placeholder="0–10"><button class="ib" onclick="admSet()">Đặt điểm</button>
+    <button class="ib" onclick="left+=300">⏱ +5 phút</button>
+    <button class="ib" onclick="finish()">Nộp bài ngay</button>
+  </div>
+  <div class="main" id="main">
+    <div class="keys" id="keys"><b>Phím tắt:</b><span><kbd>1</kbd> → Chọn A</span><span><kbd>2</kbd> → Chọn B</span><span><kbd>3</kbd> → Chọn C</span><span><kbd>4</kbd> → Chọn D</span><span><kbd>Enter</kbd> → Kiểm tra/Câu hỏi tiếp theo</span><span><kbd>Esc</kbd> → Bỏ qua</span><button class="x" onclick="this.parentElement.style.display='none'">✕</button></div>
+    <div class="qc"><div class="qn" id="qn"></div><div class="qq" id="qq"></div><div class="dv"><span id="dv"></span></div><div id="opts"></div></div>
+  </div>
+  <div class="bot">
+    <button class="ib" style="border:none;background:none;color:var(--mut)" onclick="two('r',this,start)">↻ Bắt đầu lại</button>
+    <b id="pg2" style="white-space:nowrap"></b>
+    <div class="dots" id="dots2"></div>
+    <button class="chk" id="ck" onclick="act()">Kiểm tra</button>
+  </div>
+</div>
+
+<script>
+const RAW=`#Bài 1. Giới thiệu về trồng trọt
+Câu 1. Sản phẩm nào sau đây là sản phẩm của trồng trọt?
+*A. Gạo, ngô và rau xanh.
+B. Thịt lợn, trứng và sữa.
+C. Cá, tôm và cua đồng.
+D. Vải vóc, giấy và đồ gỗ.
+Câu 2. Nhóm cây trồng nào được phân loại chủ yếu theo mục đích sử dụng?
+A. Cây thân gỗ, cây thân thảo, cây dây leo.
+B. Cây nhiệt đới, cây ôn đới, cây á nhiệt đới.
+*C. Cây lương thực, cây công nghiệp, cây ăn quả.
+D. Cây một năm, cây lâu năm, cây hai năm.
+Câu 3. Phương thức trồng trọt nào được thực hiện trong điều kiện tự nhiên?
+A. Trồng cây trong phòng thí nghiệm.
+*B. Trồng cây ngoài tự nhiên.
+C. Trồng cây trong nhà có mái che.
+D. Trồng cây bằng nuôi cấy mô.
+Câu 4. Vì sao Việt Nam có nhiều lợi thế để phát triển trồng trọt?
+A. Vì mọi vùng đều có khí hậu và đất đai giống nhau.
+B. Vì cây trồng không chịu ảnh hưởng của thời tiết.
+C. Vì phần lớn cây trồng đều không cần chăm sóc.
+*D. Vì có khí hậu thuận lợi, đất đai và địa hình đa dạng.
+Câu 5. Ưu điểm nổi bật của trồng trọt trong nhà có mái che là gì?
+*A. Giảm ảnh hưởng bất lợi của môi trường tự nhiên.
+B. Không cần tưới nước và bón phân cho cây trồng.
+C. Không cần kiểm tra sâu, bệnh trong quá trình trồng.
+D. Luôn đạt năng suất cao mà không cần đầu tư.
+Câu 6. Đặc điểm nào phù hợp với trồng trọt công nghệ cao?
+A. Chủ yếu sử dụng lao động thủ công trong sản xuất.
+B. Chỉ trồng cây trên đất tự nhiên, không dùng giá thể.
+*C. Ứng dụng thiết bị hiện đại để nâng cao hiệu quả sản xuất.
+D. Không cần kiểm soát quy trình sản xuất và tiêu thụ.
+Câu 7. Một gia đình trồng rau ở nơi thường xuyên có mưa lớn và sâu, bệnh phát sinh. Phương thức nào phù hợp để hạn chế các tác động bất lợi này?
+A. Trồng rau hoàn toàn ngoài tự nhiên.
+*B. Trồng rau trong nhà có mái che.
+C. Trồng rau không cần chăm sóc thường xuyên.
+D. Trồng rau trên đất không cần cải tạo.
+Câu 8. Một học sinh yêu thích nghiên cứu, kiên trì theo dõi sự sinh trưởng và đặc điểm của cây. Ngành nghề nào phù hợp nhất với sở thích đó?
+A. Người thu hoạch nông sản theo mùa vụ.
+B. Người vận chuyển sản phẩm đến thị trường.
+C. Người kinh doanh vật tư phục vụ trồng trọt.
+*D. Kĩ sư chọn giống cây trồng.
+Câu 9. Một địa phương có đất phù sa, nguồn nước thuận lợi và người dân có kinh nghiệm trồng lúa. Giải pháp nào phù hợp nhất để phát huy lợi thế địa phương?
+*A. Phát triển trồng lúa phù hợp với điều kiện địa phương.
+B. Chuyển toàn bộ diện tích đất sang trồng cây cảnh.
+C. Ngừng sản xuất nông nghiệp để nhập khẩu lương thực.
+D. Trồng một loại cây bất kể điều kiện khí hậu.
+Câu 10. Một cơ sở muốn sản xuất rau chất lượng cao, chủ động điều chỉnh điều kiện sinh trưởng và giảm công lao động. Phương án nào phù hợp nhất?
+A. Trồng rau ngoài trời, sử dụng hoàn toàn sức người.
+B. Trồng rau theo tập quán, không kiểm soát quy trình.
+*C. Ứng dụng công nghệ hiện đại trong quy trình sản xuất.
+D. Tăng diện tích trồng nhưng không thay đổi phương thức.
+Câu 11. Một địa phương có điều kiện khí hậu nhiệt đới, địa hình đa dạng và truyền thống sản xuất nông nghiệp. Xác định mỗi nhận định sau là đúng hay sai?
+a) Trồng trọt cung cấp lương thực, thực phẩm cho con người.|Đ
+b) Trồng trọt chỉ có vai trò cung cấp thức ăn cho con người, không hỗ trợ ngành nghề khác.|S
+c) Điều kiện khí hậu và đất đai đa dạng tạo thuận lợi để phát triển nhiều loại cây trồng.|Đ
+d) Phát triển trồng trọt không cần quan tâm đến chất lượng sản phẩm và nhu cầu thị trường.|S
+Câu 12. Một cơ sở sản xuất muốn nâng cao chất lượng rau và giảm ảnh hưởng của thời tiết bất lợi. Xác định mỗi nhận định sau là đúng hay sai?
+a) Trồng rau trong nhà có mái che có thể hạn chế một số tác động bất lợi của thời tiết.|Đ
+b) Trồng trọt công nghệ cao chỉ cần tăng diện tích mà không cần thiết bị hiện đại.|S
+c) Sử dụng giống mới có năng suất cao, chất lượng tốt là một đặc điểm của trồng trọt công nghệ cao.|Đ
+d) Muốn phát triển trồng trọt bền vững, cơ sở cần kết hợp điều kiện sản xuất, công nghệ và yêu cầu chất lượng nông sản.|Đ
+#Bài 2. Làm đất trồng cây
+Câu 13. Đất trồng gồm những thành phần chính nào?
+A. Chất hữu cơ, chất vô cơ và sinh vật.
+*B. Phần rắn, phần lỏng và phần khí.
+C. Nước, ánh sáng và chất dinh dưỡng.
+D. Đất mặt, đất dưới và đá mẹ.
+Câu 14. Thành phần nào của đất trồng cung cấp oxygen cho rễ cây?
+A. Phần rắn.
+B. Phần lỏng.
+*C. Phần khí.
+D. Chất hữu cơ.
+Câu 15. Bón phân lót thường được thực hiện vào thời điểm nào?
+*A. Trước khi gieo trồng.
+B. Khi cây đã thu hoạch xong.
+C. Khi cây đã kết thúc sinh trưởng.
+D. Sau khi bảo quản nông sản.
+Câu 16. Mục đích chính của cày đất là gì?
+A. Thu gom sản phẩm sau thu hoạch.
+B. Diệt toàn bộ sinh vật có ích trong đất.
+C. Làm đất chặt hơn để giữ cây đứng vững.
+*D. Làm đất tơi, tăng độ thoáng và vùi lấp cỏ dại.
+Câu 17. Bừa hoặc đập đất sau khi cày nhằm mục đích chủ yếu nào?
+A. Tăng độ cứng của đất để hạn chế rễ phát triển.
+*B. Làm nhỏ đất, phá vỡ các cục đất sau khi cày.
+C. Loại bỏ hoàn toàn nước và không khí trong đất.
+D. Thay thế việc bón phân trước khi gieo trồng.
+Câu 18. Bón phân lót giúp cây trồng như thế nào?
+A. Ngừng phát triển rễ trước khi gieo trồng.
+B. Hạn chế hoàn toàn nhu cầu tưới nước.
+*C. Có sẵn nguồn dinh dưỡng khi rễ bắt đầu phát triển.
+D. Không cần bổ sung dinh dưỡng trong suốt vụ trồng.
+Câu 19. Một học sinh muốn trồng rau trên ban công trong các thùng chứa. Trước khi gieo hạt, việc chuẩn bị nào phù hợp nhất?
+A. Đổ đất vào thùng rồi gieo ngay, không cần kiểm tra.
+B. Nén chặt đất, bỏ qua việc bổ sung dinh dưỡng.
+C. Chỉ tưới thật nhiều nước, không cần làm đất.
+*D. Chuẩn bị đất phù hợp, làm tơi và bón lót khi cần.
+Câu 20. Sau khi cày, đất trong vườn còn nhiều cục lớn. Người trồng nên thực hiện công việc nào tiếp theo?
+*A. Bừa hoặc đập đất để làm nhỏ đất.
+B. Thu hoạch ngay cây trồng chưa được gieo.
+C. Nén chặt toàn bộ mặt đất để giảm độ xốp.
+D. Bỏ qua khâu làm đất và tăng lượng nước tưới.
+Câu 21. Một khu đất trồng rau có bề mặt bằng phẳng, dễ đọng nước. Người trồng muốn tạo khu vực trồng có hình dạng thuận lợi cho việc chăm sóc và thoát nước. Công việc nào phù hợp?
+A. Thu hoạch.
+B. Bón phân thúc.
+*C. Lên luống.
+D. Tỉa cây.
+Câu 22. Một nhóm học sinh chuẩn bị đất trồng rau trong vườn trường. Đất có nhiều cục lớn, cỏ dại và chưa được bổ sung dinh dưỡng. Quy trình nào hợp lí nhất?
+A. Gieo hạt, thu hoạch, sau đó mới làm đất.
+*B. Làm đất, loại bỏ cỏ dại, chuẩn bị luống và bón lót phù hợp trước khi gieo.
+C. Tưới ngập đất, nén chặt rồi gieo hạt ngay.
+D. Bón thật nhiều phân hóa học rồi bỏ qua khâu làm đất.
+Câu 23. Một nhóm học sinh tìm hiểu thành phần và vai trò của đất trồng. Xác định mỗi nhận định sau là đúng hay sai?
+a) Phần rắn có vai trò cung cấp chất dinh dưỡng và giúp cây đứng vững.|Đ
+b) Phần lỏng cung cấp nước và hòa tan chất dinh dưỡng để cây dễ hấp thụ.|Đ
+c) Phần khí cung cấp oxygen cho rễ và góp phần làm đất tơi xốp.|Đ
+d) Cả ba thành phần của đất trồng đều chỉ có chức năng cung cấp chất dinh dưỡng.|S
+Câu 24. Một vườn rau chuẩn bị gieo trồng trên nền đất có nhiều cục lớn và cỏ dại. Xác định mỗi nhận định sau là đúng hay sai.
+a) Cày đất, bừa hoặc đập đất là những công việc thuộc quá trình làm đất.|Đ
+b) Bón phân lót thường được thực hiện sau khi cây đã thu hoạch.|S
+c) Phân hữu cơ hoặc phân lân có thể được sử dụng để bón lót.|Đ
+d) Có thể bỏ qua việc chuẩn bị đất vì hạt giống sẽ tự phát triển tốt trên mọi loại đất.|S
+#Bài 3. Gieo trồng, chăm sóc và phòng trừ sâu, bệnh cho cây trồng
+Câu 25. Có hai hình thức gieo trồng chính nào?
+A. Cày đất và bừa đất.
+B. Tưới nước và tiêu nước.
+*C. Gieo bằng hạt và trồng bằng cây con.
+D. Bón phân lót và bón phân thúc.
+Câu 26. Khi gieo trồng, cần bảo đảm những yêu cầu nào?
+*A. Thời vụ, mật độ, khoảng cách và độ nông, sâu.
+B. Màu sắc, kích thước, hình dạng và mùi của lá.
+C. Thời gian thu hoạch, giá bán và nơi tiêu thụ.
+D. Độ cao cây, số quả và kích thước hạt khi thu hoạch.
+Câu 27. Nguyên tắc quan trọng trong phòng trừ sâu, bệnh hại cây trồng là gì?
+A. Chỉ sử dụng thuốc hóa học khi cây có sâu, bệnh.
+B. Chỉ diệt sâu, bệnh khi cây đã bị hại nặng.
+C. Thực hiện phòng trừ bằng một biện pháp duy nhất.
+*D. Phòng là chính, trừ sớm và sử dụng biện pháp tổng hợp.
+Câu 28. Vì sao cần tỉa, dặm cây sau khi gieo trồng?
+A. Để tất cả cây đều phát triển với mật độ dày nhất.
+*B. Để điều chỉnh mật độ, bảo đảm cây sinh trưởng phù hợp.
+C. Để loại bỏ mọi cây có tốc độ sinh trưởng nhanh.
+D. Để thay thế hoàn toàn việc tưới nước và bón phân.
+Câu 29. Làm cỏ và vun xới có tác dụng chủ yếu nào?
+*A. Làm giảm sự cạnh tranh dinh dưỡng và tăng độ tơi xốp của đất.
+B. Làm tăng sự cạnh tranh giữa cây trồng với cỏ dại.
+C. Ngăn cây hấp thụ nước và chất dinh dưỡng trong đất.
+D. Thay thế toàn bộ các biện pháp phòng trừ sâu, bệnh.
+Câu 30. Vì sao phải tiêu nước kịp thời khi cây trồng bị ngập úng?
+A. Vì nước làm tăng độ cứng của thân cây.
+B. Vì cây trồng luôn cần ngập nước trong thời gian dài.
+*C. Vì ngập úng ảnh hưởng đến rễ và có thể làm cây chết.
+D. Vì tiêu nước giúp loại bỏ hoàn toàn sâu, bệnh hại.
+Câu 31. Hạt đậu được gieo trên đất quá khô, sau nhiều ngày chưa nảy mầm. Biện pháp nào phù hợp nhất?
+A. Nén chặt đất và ngừng tưới nước.
+*B. Bổ sung nước phù hợp để duy trì độ ẩm cần thiết.
+C. Bón thật nhiều phân hóa học lên hạt.
+D. Làm ngập toàn bộ khu vực gieo hạt trong thời gian dài.
+Câu 32. Một ruộng rau xuất hiện sâu ăn lá với số lượng ít, có thể quan sát và bắt được bằng tay. Biện pháp nào phù hợp?
+A. Tăng lượng phân bón để cây phát triển nhanh.
+B. Thu hoạch ngay toàn bộ rau chưa đến thời điểm thu hoạch.
+C. Tưới ngập ruộng để loại bỏ mọi loại sâu hại.
+*D. Áp dụng biện pháp thủ công để bắt sâu và loại bỏ bộ phận bị bệnh.
+Câu 33. Khi sử dụng thuốc hóa học để phòng trừ sâu, bệnh, người lao động cần thực hiện yêu cầu nào?
+A. Phun ngược chiều gió để thuốc bám đều lên người.
+B. Tăng liều lượng thuốc để rút ngắn thời gian cách li.
+*C. Dùng đúng thuốc, đúng liều lượng và bảo đảm an toàn.
+D. Thu hoạch ngay sau khi phun để tránh thất thoát sản phẩm.
+Câu 34. Một vườn rau có cỏ dại, cây trồng sinh trưởng không đồng đều và xuất hiện sâu hại. Phương án nào phù hợp nhất với nguyên tắc phòng trừ sâu, bệnh?
+*A. Kết hợp chăm sóc hợp lí, vệ sinh vườn và biện pháp phòng trừ phù hợp.
+B. Chỉ phun thuốc hóa học nhiều lần, không cần xác định tình trạng sâu hại.
+C. Chỉ bón thêm phân hóa học và không cần làm cỏ trong vườn.
+D. Ngừng tưới nước và không theo dõi tình trạng cây trồng.
+Câu 35. Một học sinh theo dõi vườn rau sau khi gieo trồng. Xác định mỗi nhận định sau là đúng hay sai.
+a) Thời vụ gieo trồng có thể được xác định dựa vào điều kiện khí hậu và tình hình sâu, bệnh tại địa phương.|Đ
+b) Tưới nước và tiêu nước đều cần được thực hiện phù hợp với tình trạng của cây và đất.|Đ
+c) Làm cỏ, vun xới có thể giúp hạn chế cạnh tranh dinh dưỡng và tạo điều kiện thuận lợi cho rễ phát triển.|Đ
+d) Tất cả cây trồng đều phải gieo ở cùng mật độ và độ sâu, không phụ thuộc vào đặc điểm giống cây.|S
+Câu 36. Một gia đình trồng rau phát hiện sâu hại và dự định sử dụng thuốc hóa học. Xác định mỗi nhận định sau là đúng hay sai.
+a) Cần ưu tiên phòng là chính và lựa chọn biện pháp phòng trừ phù hợp.|Đ
+b) Có thể tăng liều lượng thuốc vượt hướng dẫn để tiêu diệt sâu nhanh hơn.|S
+c) Khi phun thuốc cần sử dụng bảo hộ lao động và tuân thủ thời gian cách li.|Đ
+d) Kết hợp vệ sinh đồng ruộng, chăm sóc hợp lí và biện pháp phòng trừ thích hợp có thể giúp hạn chế sâu, bệnh.|Đ
+#Bài 4. Thu hoạch sản phẩm trồng trọt
+Câu 37. Thu hoạch sản phẩm là giai đoạn nào trong quy trình trồng trọt?
+A. Giai đoạn chuẩn bị đất.
+B. Giai đoạn gieo trồng.
+C. Giai đoạn chăm sóc cây.
+*D. Giai đoạn cuối trong quy trình trồng trọt.
+Câu 38. Phương pháp nào thường được sử dụng để thu hoạch lạc (đậu phộng)?
+A. Hái.
+*B. Nhổ.
+C. Cắt.
+D. Đào.
+Câu 39. Phương pháp nào phù hợp để thu hoạch khoai lang?
+A. Hái.
+B. Cắt.
+*C. Đào.
+D. Nhổ.
+Câu 40. Vì sao cần thu hoạch sản phẩm trồng trọt đúng lúc?
+*A. Để hạn chế tổn thất và bảo đảm chất lượng sản phẩm.
+B. Để cây tiếp tục sinh trưởng sau khi đã thu hoạch.
+C. Để không cần sử dụng dụng cụ thu hoạch phù hợp.
+D. Để loại bỏ hoàn toàn nhu cầu bảo quản nông sản.
+Câu 41. Yêu cầu nào phù hợp khi thu hoạch sản phẩm trồng trọt?
+A. Thu hoạch bất kể thời điểm và tình trạng sản phẩm.
+B. Sử dụng một phương pháp cho mọi loại cây trồng.
+C. Thu hoạch chậm, không cần quan tâm đến tổn thất.
+*D. Thu hoạch đúng lúc, nhanh gọn và cẩn thận.
+Câu 42. Vì sao cần lựa chọn phương pháp thu hoạch phù hợp với từng loại cây trồng?
+A. Để tất cả sản phẩm có cùng hình dạng sau thu hoạch.
+*B. Để giảm tổn thất và giữ chất lượng sản phẩm tốt nhất.
+C. Để thay thế toàn bộ các công đoạn chăm sóc cây.
+D. Để sản phẩm không cần bảo quản sau khi thu hoạch.
+Câu 43. Một hộ gia đình thu hoạch khoai tây. Phương pháp nào phù hợp nhất?
+*A. Đào để lấy củ trong đất.
+B. Hái từng củ trên thân cây.
+C. Cắt toàn bộ củ khỏi thân cây.
+D. Nhổ lá để thu được củ.
+Câu 44. Một gia đình thu hoạch nhiều loại nông sản khác nhau. Xác định mỗi nhận định sau là đúng hay sai.
+a) Thu hoạch là bước cuối cùng trong quy trình trồng trọt.|Đ
+b) Khi thu hoạch cần lựa chọn phương pháp và dụng cụ phù hợp với từng loại cây trồng.|Đ
+c) Hái, nhổ, đào và cắt là những phương pháp thu hoạch phổ biến.|Đ
+d) Có thể thu hoạch ở bất kì thời điểm nào vì thời điểm thu hoạch không ảnh hưởng đến chất lượng sản phẩm.|S
+Câu 45. Một cơ sở thu hoạch rau, củ và dự định bảo quản sản phẩm để bán dần. Xác định mỗi nhận định sau là đúng hay sai.
+a) Thu hoạch đúng lúc, nhanh gọn và cẩn thận giúp hạn chế tổn thất sản phẩm.|Đ
+b) Bảo quản không đúng cách có thể làm giảm số lượng và chất lượng nông sản.|Đ
+c) Mọi loại nông sản đều phải được bảo quản lạnh, không cần xét đặc điểm sản phẩm.|S
+d) Cần lựa chọn phương pháp bảo quản phù hợp với đặc điểm sản phẩm và yêu cầu bảo quản.|Đ`;
+
+// Phân tích dữ liệu thô thành mảng câu hỏi
+const Q=[];let bai='';
+RAW.split('\n').forEach(l=>{
+  let m;
+  if(l[0]==='#'){bai=l.slice(1);return}
+  if(m=l.match(/^Câu (\d+)\.\s*(.*)/)){Q.push({n:m[1],t:m[2],bai,o:[],s:[]});return}
+  const q=Q[Q.length-1];
+  if(m=l.match(/^(\*?)([A-D])\.\s*(.*)/)){q.o.push(m[3]);if(m[1])q.k=q.o.length-1;return}
+  if(m=l.match(/^([a-d])\)\s*(.*)\|([ĐS])$/)){q.s.push({t:m[1]+') '+m[2],d:m[3]==='Đ'})}
+});
+
+let cur=0,score=0,left=60*60,tid,locked=false,tfDone=0,tfOk=0;
+const $=id=>document.getElementById(id);
+
+function upd(){
+  const p=score+(tfDone<(Q[cur].s.length||0)?tfOk/Q[cur].s.length:0);
+  $('ls').textContent=`Điểm hiện tại: ${(p/Q.length*10).toFixed(2)} / 10`;
+}
+function show(){
+  const q=Q[cur],tf=q.s.length>0;
+  locked=false;tfDone=0;tfOk=0;$('nx').classList.add('hide');
+  $('pg').textContent=`Câu ${cur+1} / ${Q.length}`;
+  $('pb').style.width=(cur/Q.length*100)+'%';upd();
+  let h=`<span class="tag">${q.bai}${tf?' · Đúng – Sai':''}</span><div class="qt">Câu ${q.n}. ${q.t}</div>`;
+  if(tf){
+    h+=q.s.map((s,i)=>`<div class="st" id="st${i}"><p>${s.t}</p><div class="row"><button class="opt" onclick="tfPick(${i},true,this)">Đúng</button><button class="opt" onclick="tfPick(${i},false,this)">Sai</button></div></div>`).join('');
+  }else{
+    h+=q.o.map((o,i)=>`<button class="opt" onclick="pick(${i},this)">${'ABCD'[i]}. ${o}</button>`).join('');
+  }
+  $('qa').innerHTML=h;
+}
+function pick(i,el){
+  if(locked)return;locked=true;
+  const bs=el.parentElement.querySelectorAll('.opt');
+  bs.forEach(b=>b.disabled=true);
+  if(i===Q[cur].k){el.classList.add('ok');score++;upd()}
+  else{el.classList.add('no');bs[Q[cur].k].classList.add('ok')}
+  $('nx').classList.remove('hide');
+}
+function tfPick(i,v,el){
+  const row=el.parentElement,bs=row.querySelectorAll('.opt');
+  bs.forEach(b=>b.disabled=true);
+  const ans=Q[cur].s[i].d;
+  if(v===ans){el.classList.add('ok');tfOk++;upd()}
+  else{el.classList.add('no');bs[ans?0:1].classList.add('ok')}
+  if(++tfDone===Q[cur].s.length){score+=tfOk/Q[cur].s.length;$('nx').classList.remove('hide')}
+}
+function next(){
+  if(++cur<Q.length)show();else finish();
+}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function finish(){
+  clearInterval(tid);
+  $('quiz').style.display='none';$('tm').style.display='none';
+  saveHist(score/Q.length*10);
+  $('sc').textContent=(score/Q.length*10).toFixed(2)+' Điểm';
+  $('cc').textContent=`Đạt ${score.toFixed(2).replace(/\.00$/,'')} / ${Q.length} câu (câu đúng – sai tính theo từng ý)`;
+  $('res').style.display='block';
+}
+function loadHist(){try{return JSON.parse(localStorage.getItem('azh')||'[]')}catch(e){return[]}}
+function saveHist(s){try{const a=loadHist();a.push({t:new Date().toLocaleString('vi-VN'),s:s.toFixed(2)});localStorage.setItem('azh',JSON.stringify(a))}catch(e){}}
+function toggleHist(){
+  const h=$('hist');
+  if(!h.classList.toggle('hide')){
+    const a=loadHist();
+    h.innerHTML=a.length?a.slice().reverse().map(x=>`<div class="irow"><span>${x.t}</span><b>${x.s} điểm</b></div>`).join(''):'<p style="text-align:center;color:var(--mut)">Chưa có lượt làm bài nào.</p>';
+  }
+}
+function start(){
+  $('intro').style.display='none';$('quiz').style.display='block';$('tm').style.display='block';
+  tid=setInterval(()=>{
+    left--;$('tm').textContent='⏱️ '+fmt(left);
+    if(left<=0){alert('Hết giờ làm bài! Hệ thống tự động nộp bài.');finish()}
+  },1000);
+  show();
+}
+$('iq').textContent=Q.length;
+$('il').textContent=loadHist().length+' lượt';
+
+const C=document.querySelector('.container');
+let pname='';
+let admin=false;
+async function delName(name){
+  if(!SB_URL)return;
+  try{await fetch(SBB+'/rest/v1/rpc/delete_score',{method:'POST',headers:SBH,body:JSON.stringify({p_name:name})})}catch(e){}
+  showLB();
+}
+function chkAdm(){$('pwbox').style.display=$('name').value.trim()==='LocalAdminUser'?'block':'none'}
+function admSkip(){rs[cur]=rs[cur]||'sk';next()}
+function admAuto(){if(checked)return;const q=Q[cur];if(q.s.length)q.s.forEach((x,i)=>tfp(i,x.d));else pk(q.k);check()}
+function admPlus(){score=Math.min(Q.length,score+1);upd()}
+function admSet(){const v=parseFloat($('sp').value);if(isNaN(v))return;score=Math.max(0,Math.min(10,v))/10*Q.length;upd()}
+// Dán thông tin Supabase vào đây (Project Settings → API)
+const SB_URL='https://sqnqhqdecvbosmkilfrt.supabase.co';  // ví dụ: https://abcdxyz.supabase.co
+const SB_KEY='sb_publishable_Qxs3WPv1dqXXi2jPr3YwGQ_zR5VRmLG';  // anon public key (KHÔNG dùng service_role)
+const LBURL='leaderboard.json';
+const SBH={apikey:SB_KEY,'Content-Type':'application/json'};
+if(SB_KEY.startsWith('eyJ'))SBH.Authorization='Bearer '+SB_KEY; // khóa anon cũ (JWT); khóa sb_publishable_ chỉ cần apikey
+const SBB=SB_URL.replace(/\/$/,'');
+async function saveLB(d){
+  if(!SB_URL)return;
+  try{await fetch(SBB+'/rest/v1/rpc/submit_score',{method:'POST',headers:SBH,body:JSON.stringify({p_name:pname,p_score:+d.toFixed(2),p_correct:+score.toFixed(2)})})}catch(e){}
+}
+async function showLB(){
+  const box=$('lb');box.textContent='Đang tải...';
+  try{
+    const r=SB_URL?await fetch(SBB+'/rest/v1/leaderboard?select=name,score&order=score.desc&limit=10',{headers:SBH}):await fetch(LBURL+'?t='+Date.now());
+    if(!r.ok)throw 0;
+    const a=Object.values(await r.json()||{}).sort((x,y)=>y.score-x.score).slice(0,10);
+    box.innerHTML='';
+    if(!a.length){box.textContent='Chưa có ai trên bảng.';return}
+    a.forEach((x,i)=>{
+      const row=document.createElement('div'),n=document.createElement('span'),p=document.createElement('b'),me=x.name===pname;
+      row.className='irow';if(me)row.style.background='var(--hv)';
+      n.style.color='var(--tx)';n.textContent=(i+1)+'. '+(x.name||'Ẩn danh')+(me?' (bạn)':'');
+      if((me||admin)&&SB_URL){const del=document.createElement('button');del.className='ib';del.textContent='🗑 Xóa';del.style.cssText='margin-left:8px;padding:2px 8px;font-size:12px';del.onclick=()=>two('del'+i,del,()=>delName(x.name));n.append(del)}
+      p.textContent=Number(x.score).toFixed(2)+' điểm';
+      row.append(n,p);box.append(row);
+    });
+  }catch(e){box.textContent='Không tải được bảng xếp hạng.'}
+}
+try{$('name').value=localStorage.getItem('azn')||''}catch(e){}
+try{$('dn').value=localStorage.getItem('azd')||''}catch(e){}
+chkAdm();
+let sel=null,tfs=[],checked=false,zoom=1,snd=true,rs=[],armed=null;
+function two(k,el,fn){if(armed===k){armed=null;fn();return}armed=k;const t=el.textContent;el.textContent='Bấm lại để xác nhận';setTimeout(()=>{armed=null;el.textContent=t},3000)}
+function zm(d){zoom=Math.min(1.5,Math.max(1,+(zoom+d).toFixed(1)));$('main').style.zoom=zoom;$('zo').disabled=zoom<=1}
+function fs(){try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}}
+function beep(ok){if(!snd)return;try{const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=ok?880:220;g.gain.value=.08;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.15)}catch(e){}}
+function fmt(s){const p=n=>String(n).padStart(2,'0');return p(Math.floor(s/3600))+' : '+p(Math.floor(s%3600/60))+' : '+p(s%60)}
+function upd(){$('ls2').textContent='Điểm: '+(score/Q.length*10).toFixed(2)+' / 10'}
+function dots(){$('dots2').innerHTML=Q.map((_,i)=>`<i class="dot ${i===cur?'cur':rs[i]||''}"></i>`).join('');const c=$('dots2').children[cur];if(c)c.scrollIntoView({inline:'center',block:'nearest'})}
+function show(){
+  const q=Q[cur],tf=q.s.length>0;
+  sel=null;tfs=tf?q.s.map(()=>null):[];checked=false;
+  $('qn').textContent='Câu '+q.n;$('qq').textContent=q.t;
+  $('dv').textContent=tf?'Chọn Đúng hoặc Sai cho mỗi ý':'Chọn một đáp án đúng';
+  $('opts').innerHTML=tf?q.s.map((s,i)=>`<div class="st"><p>${s.t}</p><div class="tfr"><button class="oi" id="t${i}y" onclick="tfp(${i},true)"><span class="ol">Đ</span><span class="ot">Đúng</span></button><button class="oi" id="t${i}n" onclick="tfp(${i},false)"><span class="ol">S</span><span class="ot">Sai</span></button></div></div>`).join(''):q.o.map((o,i)=>`<button class="oi" id="o${i}" onclick="pk(${i})"><span class="ol">${'ABCD'[i]}</span><span class="ot">${o}</span></button>`).join('');
+  $('pg2').textContent=`Câu ${cur+1}/${Q.length}`;
+  $('ck').textContent='Kiểm tra';$('ck').disabled=true;$('main').scrollTop=0;
+  upd();dots();
+}
+function pk(i){if(checked)return;sel=i;for(let j=0;j<4;j++){const b=$('o'+j);if(b)b.classList.toggle('sel',j===i)}$('ck').disabled=false}
+function tfp(i,v){if(checked)return;tfs[i]=v;$('t'+i+'y').classList.toggle('sel',v===true);$('t'+i+'n').classList.toggle('sel',v===false);$('ck').disabled=tfs.some(x=>x===null)}
+function act(){checked?next():check()}
+function check(){
+  const q=Q[cur],n=q.s.length;checked=true;let r;
+  $('opts').querySelectorAll('.oi').forEach(b=>b.disabled=true);
+  if(n){
+    let c=0;
+    q.s.forEach((s,i)=>{$('t'+i+(s.d?'y':'n')).classList.add('ok');if(tfs[i]===s.d)c++;else $('t'+i+(tfs[i]?'y':'n')).classList.add('no')});
+    score+=c/n;r=c===n?'ok':c?'pt':'no';
+  }else{
+    $('o'+q.k).classList.add('ok');
+    if(sel===q.k){score++;r='ok'}else{$('o'+sel).classList.add('no');r='no'}
+  }
+  rs[cur]=r;beep(r==='ok');
+  $('ck').textContent=cur===Q.length-1?'Nộp bài':'Câu tiếp theo';$('ck').disabled=false;
+  upd();dots();
+}
+function skip(){if(checked)return;rs[cur]='sk';next()}
+function next(){++cur<Q.length?show():finish()}
+function tick(){left--;$('tm2').textContent=fmt(Math.max(left,0));if(left<=0)finish()}
+function start(){
+  const first=$('intro').style.display!=='none',v=$('name').value.trim();
+  if(first&&!v){$('name').focus();$('name').style.borderColor='#dc3545';$('name').placeholder='Vui lòng nhập tên thí sinh';return}
+  if(first){
+    if(v==='LocalAdminUser'){
+      const pw=$('pw').value;
+      if(pw!=='adminonly@123'){$('pwbox').style.display='block';$('pwerr').textContent=pw?'Sai mật khẩu':'Vui lòng nhập mật khẩu admin';$('pw').focus();return}
+      if(!$('dn').value.trim()){$('pwerr').textContent='Vui lòng nhập tên hiển thị trên bảng xếp hạng';$('dn').focus();return}
+      admin=true;
+    }else admin=false;
+  }
+  $('adm').style.display=admin?'flex':'none';
+  if(v){pname=v;try{localStorage.setItem('azn',v)}catch(e){}}
+  if(admin){pname=$('dn').value.trim();try{localStorage.setItem('azd',pname)}catch(e){}}
+  $('nm').textContent=pname;
+  clearInterval(tid);cur=0;score=0;left=3600;rs=[];C.style.display='none';$('qz').style.display='flex';$('tm2').textContent=fmt(left);tid=setInterval(tick,1000);show()}
+function finish(){
+  clearInterval(tid);$('qz').style.display='none';C.style.display='block';$('intro').style.display='none';$('res').style.display='block';
+  const d=score/Q.length*10;saveHist(d);saveLB(d).then(showLB);C.style.maxWidth='900px';
+  $('sc').textContent=d.toFixed(2)+' Điểm';
+  $('cc').textContent=`Đạt ${+score.toFixed(2)} / ${Q.length} câu (câu đúng – sai tính theo từng ý)`;
+}
+document.addEventListener('keydown',e=>{
+  if($('qz').style.display!=='flex')return;
+  if(e.key>='1'&&e.key<='4'){const i=+e.key-1;if(!Q[cur].s.length&&i<Q[cur].o.length)pk(i)}
+  else if(e.key==='Enter'){e.preventDefault();if(!$('ck').disabled)act()}
+  else if(e.key==='Escape')skip();
+});
+</script>
+</body>
+</html>
